@@ -26,8 +26,10 @@
 		<meta name="twitter:image:alt" content="EJEZ logo and brand preview">
 
 	    <link rel="stylesheet" type="text/css" href="css/normalize.css">
-	    <link rel="stylesheet" type="text/css" href="fonts/icomoon/icomoon.css">
-	    <link rel="stylesheet" type="text/css" href="css/vendor.css">
+	    <link rel="stylesheet" type="text/css" href="fonts/icomoon/icomoon.css" media="print" onload="this.media='all'">
+	    <noscript><link rel="stylesheet" type="text/css" href="fonts/icomoon/icomoon.css"></noscript>
+	    <link rel="stylesheet" type="text/css" href="css/vendor.css" media="print" onload="this.media='all'">
+	    <noscript><link rel="stylesheet" type="text/css" href="css/vendor.css"></noscript>
 	    <link rel="stylesheet" type="text/css" href="style.css">
 	    <link rel="preload" href="images/logo-ejez.svg" as="image" type="image/svg+xml">
 
@@ -109,8 +111,8 @@
 			<div class="inner-content">
 				<div class="company-detail">
 					<div class="grid">
-						<figure>
-							<img loading="lazy" decoding="async" src="images/single-image.jpg" alt="book" class="single-image">
+							<figure>
+								<img loading="lazy" decoding="async" src="images/single-image.jpg" width="564" height="678" alt="book" class="single-image">
 						</figure>
 						<div class="detail-entry" data-aos="fade-up">
 
@@ -476,6 +478,45 @@
 		</div>
 	</div>
 
+</section>
+
+<section id="procedure">
+	<div class="container">
+		<div class="row">
+			<div class="inner-content">
+				<div class="section-header align-center">
+					<h2 class="section-subtitle">Procedure</h2>
+					<h3 class="section-title">How we build premium outcomes</h3>
+				</div>
+
+				<div class="procedure-timeline" aria-label="Project procedure timeline">
+					<article class="procedure-step">
+						<p class="procedure-step-number">01</p>
+						<h4 class="procedure-step-title">Discovery</h4>
+						<p class="procedure-step-description">We align business goals, user signals, and competitive context into one strategic direction.</p>
+					</article>
+
+					<article class="procedure-step">
+						<p class="procedure-step-number">02</p>
+						<h4 class="procedure-step-title">Strategy</h4>
+						<p class="procedure-step-description">We define positioning, experience architecture, and conversion priorities before design execution.</p>
+					</article>
+
+					<article class="procedure-step">
+						<p class="procedure-step-number">03</p>
+						<h4 class="procedure-step-title">Design &amp; Build</h4>
+						<p class="procedure-step-description">We craft high-fidelity interfaces and implement them with performance-first frontend engineering.</p>
+					</article>
+
+					<article class="procedure-step">
+						<p class="procedure-step-number">04</p>
+						<h4 class="procedure-step-title">Launch & Optimize</h4>
+						<p class="procedure-step-description">We ship with QA rigor and iterate using analytics, SEO signals, and conversion feedback loops.</p>
+					</article>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
 <section id="testimonial">

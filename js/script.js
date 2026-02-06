@@ -8,11 +8,6 @@
   if (headerWrap && header) {
     var stickyTrigger = 84;
     var scrollTicking = false;
-    var stickyTimeout = null;
-
-    function syncHeaderHeight() {
-      headerWrap.style.setProperty("--header-height", header.offsetHeight + "px");
-    }
 
     function updateHeaderState() {
       var currentScroll = window.scrollY || window.pageYOffset;
@@ -40,14 +35,6 @@
       }
     }, { passive: true });
 
-    window.addEventListener("resize", function () {
-      if (stickyTimeout) {
-        window.clearTimeout(stickyTimeout);
-      }
-      stickyTimeout = window.setTimeout(syncHeaderHeight, 80);
-    }, { passive: true });
-
-    syncHeaderHeight();
     updateHeaderState();
   }
 
@@ -269,7 +256,78 @@
 
   const navLink = document.querySelectorAll(".nav-link");
 
-  navLink.forEach(n => n.addEventListener("click", closeMenu));
+  function setActiveNavSection(sectionId) {
+    navLink.forEach(function (link) {
+      var menuItem = link.closest(".menu-item");
+      var isCurrent = link.getAttribute("href") === "#" + sectionId;
+      if (menuItem) {
+        menuItem.classList.toggle("active", isCurrent);
+      }
+      if (isCurrent) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  var navSections = [];
+  var sectionVisibility = {};
+  navLink.forEach(function (link) {
+    var href = link.getAttribute("href");
+    if (!href || href.charAt(0) !== "#") {
+      return;
+    }
+    var targetSection = document.getElementById(href.slice(1));
+    if (targetSection) {
+      navSections.push(targetSection);
+    }
+  });
+
+  if (navSections.length) {
+    setActiveNavSection(navSections[0].id);
+  }
+
+  if ("IntersectionObserver" in window && navSections.length) {
+    var currentActiveNavSectionId = navSections[0].id;
+    var navObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        sectionVisibility[entry.target.id] = entry.isIntersecting ? entry.intersectionRatio : 0;
+      });
+
+      var activeSectionId = currentActiveNavSectionId;
+      var strongestRatio = 0;
+      navSections.forEach(function (section) {
+        var ratio = sectionVisibility[section.id] || 0;
+        if (ratio > strongestRatio) {
+          strongestRatio = ratio;
+          activeSectionId = section.id;
+        }
+      });
+
+      if (activeSectionId) {
+        currentActiveNavSectionId = activeSectionId;
+        setActiveNavSection(activeSectionId);
+      }
+    }, {
+      threshold: [0.2, 0.4, 0.55, 0.75],
+      rootMargin: "-18% 0px -52% 0px"
+    });
+
+    navSections.forEach(function (section) {
+      navObserver.observe(section);
+    });
+  }
+
+  navLink.forEach(function (link) {
+    link.addEventListener("click", function () {
+      var href = link.getAttribute("href");
+      if (href && href.charAt(0) === "#") {
+        setActiveNavSection(href.slice(1));
+      }
+      closeMenu();
+    });
+  });
 
   function closeMenu() {
       setMenuState(false);
