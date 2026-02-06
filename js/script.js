@@ -256,6 +256,19 @@
 
   const navLink = document.querySelectorAll(".nav-link");
 
+  function scrollToSection(sectionId) {
+    var target = document.getElementById(sectionId);
+    if (!target) {
+      return;
+    }
+    var headerOffset = header ? Math.round(header.getBoundingClientRect().height) + 12 : 96;
+    var targetTop = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+    window.scrollTo({
+      top: Math.max(targetTop, 0),
+      behavior: "smooth"
+    });
+  }
+
   function setActiveNavSection(sectionId) {
     navLink.forEach(function (link) {
       var menuItem = link.closest(".menu-item");
@@ -320,10 +333,13 @@
   }
 
   navLink.forEach(function (link) {
-    link.addEventListener("click", function () {
+    link.addEventListener("click", function (event) {
       var href = link.getAttribute("href");
       if (href && href.charAt(0) === "#") {
-        setActiveNavSection(href.slice(1));
+        event.preventDefault();
+        var sectionId = href.slice(1);
+        setActiveNavSection(sectionId);
+        scrollToSection(sectionId);
       }
       closeMenu();
     });

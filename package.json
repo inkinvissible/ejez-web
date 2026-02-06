@@ -1,0 +1,7 @@
+{
+  "name": "ejez-web",
+  "private": true,
+  "scripts": {
+    "build:static": "node scripts/build-static-blog.mjs"
+  }
+}

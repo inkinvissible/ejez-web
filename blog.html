@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+
+<head>
+  <title>Blog EJEZ | Desarrollo Web, UX y Automatizaciones</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="author" content="EJEZ">
+  <meta name="description"
+    content="Blog de EJEZ: artículos sobre desarrollo web a medida, UX/UI, automatizaciones con n8n y decisiones técnicas para equipos que buscan crecimiento real.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#F5F0E6">
+  <link rel="canonical" href="blog.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:site_name" content="EJEZ">
+  <meta property="og:url" content="blog.html">
+  <meta property="og:title" content="Blog EJEZ | Desarrollo Web, UX y Automatizaciones">
+  <meta property="og:description"
+    content="Exploramos estrategias de producto digital, arquitectura técnica y automatizaciones para empresas.">
+  <meta property="og:image" content="images/logo.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blog EJEZ | Desarrollo Web, UX y Automatizaciones">
+  <meta name="twitter:description"
+    content="Insights prácticos sobre desarrollo web, UX y automatización de procesos para empresas.">
+  <meta name="twitter:image" content="images/logo.webp">
+
+  <link rel="preconnect" href="https://apicdn.sanity.io" crossorigin>
+  <link rel="stylesheet" type="text/css" href="css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="fonts/icomoon/icomoon.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" type="text/css" href="fonts/icomoon/icomoon.css">
+  </noscript>
+  <link rel="stylesheet" type="text/css" href="css/vendor.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" type="text/css" href="css/vendor.css">
+  </noscript>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="css/blog.css">
+  <link rel="preload" href="images/logo-ejez.svg" as="image" type="image/svg+xml">
+</head>
+
+<body class="blog-shell">
+  <div id="header-wrap">
+    <header id="header">
+      <div class="container">
+        <div class="inner-content">
+          <div class="grid">
+            <div class="main-logo">
+              <a href="index.html">
+                <img src="images/logo-ejez.svg" alt="Logo de EJEZ" width="136" height="136" decoding="async">
+              </a>
+            </div>
+
+            <nav id="navbar" aria-label="Navegación principal">
+              <div class="main-menu">
+                <ul class="menu-list" id="primary-menu">
+                  <li class="menu-item"><a href="index.html#billboard" class="nav-link">Inicio</a></li>
+                  <li class="menu-item"><a href="index.html#services" class="nav-link">Servicios</a></li>
+                  <li class="menu-item"><a href="index.html#procedure" class="nav-link">Proceso</a></li>
+                  <li class="menu-item active"><a href="blog.html" class="nav-link" aria-current="page">Blog</a></li>
+                  <li class="menu-item"><a href="index.html#footer" class="nav-link">Contacto</a></li>
+                </ul>
+
+                <button class="hamburger" type="button" aria-controls="primary-menu" aria-expanded="false"
+                  aria-label="Abrir menu principal">
+                  <span class="bar"></span>
+                  <span class="bar"></span>
+                  <span class="bar"></span>
+                </button>
+              </div>
+
+              <a href="index.html#services" class="btn-hvr-effect">
+                <span>Ver Servicios</span>
+                <i class="icon icon-long-arrow-right"></i>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <main class="blog-main">
+    <section class="blog-hero" aria-labelledby="blog-title">
+      <div class="container">
+        <div class="blog-hero-content">
+          <p class="section-kicker">Revista EJEZ</p>
+          <h1 class="section-title" id="blog-title">Ideas de desarrollo web, UX y automatización empresarial</h1>
+          <p class="section-lead">Contenido técnico y estratégico para equipos que quieren construir productos sólidos,
+            escalar operaciones y decidir con claridad.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="blog-feed-section" aria-label="Listado de artículos">
+      <div class="container">
+        <div class="blog-toolbar">
+          <h2>Últimos artículos</h2>
+          <p>Publicados desde Sanity Studio en tiempo real.</p>
+        </div>
+
+        <div id="blog-feed" class="blog-feed-grid" aria-live="polite" aria-busy="true">
+          <article class="blog-state-card">
+            <h2>Cargando contenido</h2>
+            <p>Estamos trayendo los artículos desde Sanity Studio.</p>
+          </article>
+        </div>
+
+        <noscript>
+          <article class="blog-state-card is-error" style="margin-top: 16px;">
+            <h2>JavaScript requerido</h2>
+            <p>Necesitás habilitar JavaScript para cargar el contenido dinámico del blog.</p>
+          </article>
+        </noscript>
+      </div>
+    </section>
+  </main>
+
+  <footer class="blog-footer">
+    <div class="container">
+      <div class="grid">
+        <p>© <span id="year">2026</span> EJEZ. Todos los derechos reservados.</p>
+        <nav class="blog-footer-nav" aria-label="Navegación secundaria">
+          <a href="index.html">Landing</a>
+          <a href="index.html#services">Servicios</a>
+          <a href="index.html#procedure">Proceso</a>
+          <a href="index.html#footer">Contacto</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = String(new Date().getFullYear());
+  </script>
+  <script src="js/blog-shell.js" defer></script>
+  <script src="js/sanity-config.js" defer></script>
+  <script src="js/sanity-client.js" defer></script>
+  <script src="js/blog-list.js" defer></script>
+</body>
+
+</html>

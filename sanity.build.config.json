@@ -1,0 +1,9 @@
+{
+  "siteUrl": "https://example.com",
+  "projectId": "v54tdkwf",
+  "dataset": "production",
+  "apiVersion": "2025-02-01",
+  "postType": "entry",
+  "entryKinds": [],
+  "defaultLocale": "es-AR"
+}
