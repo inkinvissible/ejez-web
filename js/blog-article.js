@@ -116,11 +116,93 @@
 
   function normalizeCalloutTone(value) {
     var tone = window.SanityBridge.sanitizeSlug(value || "");
-    var allowed = ["info", "success", "warning", "danger", "critical", "neutral", "tip", "note"];
+    if (tone === "success") {
+      tone = "tip";
+    }
+    if (tone === "critical") {
+      tone = "danger";
+    }
+    if (tone === "neutral") {
+      tone = "note";
+    }
+    var allowed = ["note", "info", "tip", "warning", "danger"];
     if (allowed.indexOf(tone) === -1) {
       return "info";
     }
     return tone;
+  }
+
+  function normalizeDividerStyle(value) {
+    var style = window.SanityBridge.sanitizeSlug(value || "");
+    if (style === "dashed" || style === "dotted") {
+      return style;
+    }
+    return "solid";
+  }
+
+  function readTableCell(cell) {
+    if (typeof cell === "string") {
+      return cell;
+    }
+    if (typeof cell === "number" || typeof cell === "boolean") {
+      return String(cell);
+    }
+    if (cell && typeof cell === "object") {
+      if (typeof cell.text === "string") {
+        return cell.text;
+      }
+      if (typeof cell.value === "string") {
+        return cell.value;
+      }
+      if (typeof cell.content === "string") {
+        return cell.content;
+      }
+    }
+    return "";
+  }
+
+  function renderTable(block) {
+    var rows = Array.isArray(block.rows) ? block.rows : [];
+    if (!rows.length) {
+      return "";
+    }
+
+    var normalizedRows = rows.map(function (row) {
+      var cells = Array.isArray(row && row.cells) ? row.cells : [];
+      return cells.map(readTableCell);
+    }).filter(function (cells) {
+      return cells.length > 0;
+    });
+
+    if (!normalizedRows.length) {
+      return "";
+    }
+
+    var useHeader = normalizedRows.length > 1;
+    var parts = ["<div class=\"article-table-wrap\"><table class=\"article-table\">"];
+
+    if (useHeader) {
+      parts.push("<thead><tr>");
+      normalizedRows[0].forEach(function (cell) {
+        var text = window.SanityBridge.escapeHtml(cell);
+        parts.push("<th scope=\"col\">" + (text || "&nbsp;") + "</th>");
+      });
+      parts.push("</tr></thead>");
+    }
+
+    var bodyRows = useHeader ? normalizedRows.slice(1) : normalizedRows;
+    parts.push("<tbody>");
+    bodyRows.forEach(function (cells) {
+      parts.push("<tr>");
+      cells.forEach(function (cell) {
+        var text = window.SanityBridge.escapeHtml(cell);
+        parts.push("<td>" + (text || "&nbsp;") + "</td>");
+      });
+      parts.push("</tr>");
+    });
+    parts.push("</tbody></table></div>");
+
+    return parts.join("");
   }
 
   function renderCallout(block) {
@@ -247,7 +329,18 @@
       }
 
       if (block._type === "divider") {
-        html.push("<hr class=\"article-divider\" role=\"separator\">");
+        var dividerStyle = normalizeDividerStyle(
+          pickStringField(block, ["style", "variant"])
+        );
+        html.push("<hr class=\"article-divider is-" + window.SanityBridge.escapeHtml(dividerStyle) + "\" role=\"separator\">");
+        return;
+      }
+
+      if (block._type === "table") {
+        var tableHtml = renderTable(block);
+        if (tableHtml) {
+          html.push(tableHtml);
+        }
         return;
       }
 

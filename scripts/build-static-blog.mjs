@@ -146,9 +146,69 @@ function pickStringField(source, keys) {
 }
 
 function normalizeCalloutTone(value) {
-  const tone = slugify(value || "");
-  const allowed = ["info", "success", "warning", "danger", "critical", "neutral", "tip", "note"];
+  let tone = slugify(value || "");
+  if (tone === "success") tone = "tip";
+  if (tone === "critical") tone = "danger";
+  if (tone === "neutral") tone = "note";
+  const allowed = ["note", "info", "tip", "warning", "danger"];
   return allowed.includes(tone) ? tone : "info";
+}
+
+function normalizeDividerStyle(value) {
+  const style = slugify(value || "");
+  if (style === "dashed" || style === "dotted") return style;
+  return "solid";
+}
+
+function readTableCell(cell) {
+  if (typeof cell === "string") return cell;
+  if (typeof cell === "number" || typeof cell === "boolean") return String(cell);
+  if (cell && typeof cell === "object") {
+    if (typeof cell.text === "string") return cell.text;
+    if (typeof cell.value === "string") return cell.value;
+    if (typeof cell.content === "string") return cell.content;
+  }
+  return "";
+}
+
+function renderTableBlock(block) {
+  const rows = Array.isArray(block.rows) ? block.rows : [];
+  if (!rows.length) return "";
+
+  const normalizedRows = rows
+    .map((row) => {
+      const cells = Array.isArray(row?.cells) ? row.cells : [];
+      return cells.map(readTableCell);
+    })
+    .filter((cells) => cells.length > 0);
+
+  if (!normalizedRows.length) return "";
+
+  const useHeader = normalizedRows.length > 1;
+  let html = "<div class=\"article-table-wrap\"><table class=\"article-table\">";
+
+  if (useHeader) {
+    html += "<thead><tr>";
+    for (const cell of normalizedRows[0]) {
+      const text = escapeHtml(cell);
+      html += `<th scope="col">${text || "&nbsp;"}</th>`;
+    }
+    html += "</tr></thead>";
+  }
+
+  html += "<tbody>";
+  const bodyRows = useHeader ? normalizedRows.slice(1) : normalizedRows;
+  for (const cells of bodyRows) {
+    html += "<tr>";
+    for (const cell of cells) {
+      const text = escapeHtml(cell);
+      html += `<td>${text || "&nbsp;"}</td>`;
+    }
+    html += "</tr>";
+  }
+  html += "</tbody></table></div>";
+
+  return html;
 }
 
 function renderCalloutBlock(block, config) {
@@ -245,7 +305,15 @@ function renderPortableText(blocks, config, options = {}) {
     }
 
     if (block._type === "divider") {
-      html += "<hr class=\"article-divider\" role=\"separator\">";
+      const dividerStyle = normalizeDividerStyle(
+        pickStringField(block, ["style", "variant"])
+      );
+      html += `<hr class="article-divider is-${escapeHtml(dividerStyle)}" role="separator">`;
+      continue;
+    }
+
+    if (block._type === "table") {
+      html += renderTableBlock(block);
       continue;
     }
 
