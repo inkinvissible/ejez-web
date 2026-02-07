@@ -104,23 +104,80 @@
     }).join("");
   }
 
-  function renderPortableText(blocks) {
+  function pickStringField(source, keys) {
+    for (var i = 0; i < keys.length; i += 1) {
+      var value = source && source[keys[i]];
+      if (typeof value === "string" && value.trim()) {
+        return value.trim();
+      }
+    }
+    return "";
+  }
+
+  function normalizeCalloutTone(value) {
+    var tone = window.SanityBridge.sanitizeSlug(value || "");
+    var allowed = ["info", "success", "warning", "danger", "critical", "neutral", "tip", "note"];
+    if (allowed.indexOf(tone) === -1) {
+      return "info";
+    }
+    return tone;
+  }
+
+  function renderCallout(block) {
+    var tone = normalizeCalloutTone(
+      pickStringField(block, ["tone", "variant", "style", "type"])
+    );
+    var title = pickStringField(block, ["title", "heading", "label"]);
+    var message = pickStringField(block, ["text", "message", "description", "contentText", "bodyText", "body", "content"]);
+
+    var nestedBlocks = null;
+    if (Array.isArray(block.body)) {
+      nestedBlocks = block.body;
+    } else if (Array.isArray(block.content)) {
+      nestedBlocks = block.content;
+    }
+
+    var bodyHtml = "";
+    if (nestedBlocks) {
+      bodyHtml = renderPortableText(nestedBlocks, { fallbackEmpty: false });
+    } else if (message) {
+      bodyHtml = "<p>" + window.SanityBridge.escapeHtml(message) + "</p>";
+    }
+
+    if (!title && !bodyHtml) {
+      return "";
+    }
+
+    return [
+      "<aside class=\"article-callout is-" + window.SanityBridge.escapeHtml(tone) + "\" role=\"note\">",
+      title ? "<h4 class=\"article-callout-title\">" + window.SanityBridge.escapeHtml(title) + "</h4>" : "",
+      "<div class=\"article-callout-body\">" + bodyHtml + "</div>",
+      "</aside>"
+    ].join("");
+  }
+
+  function renderPortableText(blocks, options) {
+    var renderOptions = options || {};
+    var fallbackEmpty = renderOptions.fallbackEmpty !== false;
     if (!Array.isArray(blocks) || blocks.length === 0) {
-      return "<p>Este artículo todavía no tiene contenido publicado.</p>";
+      return fallbackEmpty ? "<p>Este artículo todavía no tiene contenido publicado.</p>" : "";
     }
 
     var html = [];
     var activeListType = "";
+    var activeListClass = "";
     var listItems = [];
 
     function flushList() {
       if (!activeListType || listItems.length === 0) {
         activeListType = "";
+        activeListClass = "";
         listItems = [];
         return;
       }
-      html.push("<" + activeListType + " class=\"article-list\">" + listItems.join("") + "</" + activeListType + ">");
+      html.push("<" + activeListType + " class=\"" + activeListClass + "\">" + listItems.join("") + "</" + activeListType + ">");
       activeListType = "";
+      activeListClass = "";
       listItems = [];
     }
 
@@ -130,11 +187,16 @@
       }
 
       if (block._type === "block" && block.listItem) {
-        var listType = block.listItem === "number" ? "ol" : "ul";
-        if (activeListType && activeListType !== listType) {
+        var listItemKind = String(block.listItem).toLowerCase();
+        var isChecklist = listItemKind === "check" || listItemKind === "checklist" || listItemKind === "checkmarks" || listItemKind === "checked";
+        var listType = listItemKind === "number" ? "ol" : "ul";
+        var listClass = isChecklist ? "article-list article-checklist" : "article-list";
+
+        if (activeListType && (activeListType !== listType || activeListClass !== listClass)) {
           flushList();
         }
         activeListType = listType;
+        activeListClass = listClass;
         listItems.push("<li>" + renderSpans(block) + "</li>");
         return;
       }
@@ -181,6 +243,18 @@
               (block.caption ? "<figcaption>" + window.SanityBridge.escapeHtml(block.caption) + "</figcaption>" : "") +
             "</figure>"
           );
+        }
+      }
+
+      if (block._type === "divider") {
+        html.push("<hr class=\"article-divider\" role=\"separator\">");
+        return;
+      }
+
+      if (block._type === "callout") {
+        var calloutHtml = renderCallout(block);
+        if (calloutHtml) {
+          html.push(calloutHtml);
         }
       }
     });

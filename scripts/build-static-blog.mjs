@@ -135,23 +135,67 @@ function renderSpanText(block) {
   }).join("");
 }
 
-function renderPortableText(blocks, config) {
+function pickStringField(source, keys) {
+  for (const key of keys) {
+    const value = source?.[key];
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+  return "";
+}
+
+function normalizeCalloutTone(value) {
+  const tone = slugify(value || "");
+  const allowed = ["info", "success", "warning", "danger", "critical", "neutral", "tip", "note"];
+  return allowed.includes(tone) ? tone : "info";
+}
+
+function renderCalloutBlock(block, config) {
+  const tone = normalizeCalloutTone(
+    pickStringField(block, ["tone", "variant", "style", "type"])
+  );
+  const title = pickStringField(block, ["title", "heading", "label"]);
+  const message = pickStringField(block, ["text", "message", "description", "contentText", "bodyText", "body", "content"]);
+  const nestedBlocks = Array.isArray(block.body) ? block.body : (Array.isArray(block.content) ? block.content : null);
+
+  let bodyHtml = "";
+  if (nestedBlocks) {
+    bodyHtml = renderPortableText(nestedBlocks, config, { fallbackEmpty: false });
+  } else if (message) {
+    bodyHtml = `<p>${escapeHtml(message)}</p>`;
+  }
+
+  if (!title && !bodyHtml) {
+    return "";
+  }
+
+  return `<aside class="article-callout is-${escapeHtml(tone)}" role="note">${
+    title ? `<h4 class="article-callout-title">${escapeHtml(title)}</h4>` : ""
+  }<div class="article-callout-body">${bodyHtml}</div></aside>`;
+}
+
+function renderPortableText(blocks, config, options = {}) {
+  const fallbackEmpty = options.fallbackEmpty !== false;
   if (!Array.isArray(blocks) || blocks.length === 0) {
-    return "<p>Este artículo todavía no tiene contenido publicado.</p>";
+    return fallbackEmpty ? "<p>Este artículo todavía no tiene contenido publicado.</p>" : "";
   }
 
   let html = "";
   let activeList = "";
+  let activeListClass = "";
   let listItems = [];
 
   const flushList = () => {
     if (!activeList || listItems.length === 0) {
       activeList = "";
+      activeListClass = "";
       listItems = [];
       return;
     }
-    html += `<${activeList} class="article-list">${listItems.join("")}</${activeList}>`;
+    html += `<${activeList} class="${activeListClass}">${listItems.join("")}</${activeList}>`;
     activeList = "";
+    activeListClass = "";
     listItems = [];
   };
 
@@ -159,9 +203,13 @@ function renderPortableText(blocks, config) {
     if (!block) continue;
 
     if (block._type === "block" && block.listItem) {
-      const nextListType = block.listItem === "number" ? "ol" : "ul";
-      if (activeList && activeList !== nextListType) flushList();
+      const listItemKind = String(block.listItem).toLowerCase();
+      const isChecklist = listItemKind === "check" || listItemKind === "checklist" || listItemKind === "checkmarks" || listItemKind === "checked";
+      const nextListType = listItemKind === "number" ? "ol" : "ul";
+      const nextListClass = isChecklist ? "article-list article-checklist" : "article-list";
+      if (activeList && (activeList !== nextListType || activeListClass !== nextListClass)) flushList();
       activeList = nextListType;
+      activeListClass = nextListClass;
       listItems.push(`<li>${renderSpanText(block)}</li>`);
       continue;
     }
@@ -194,6 +242,15 @@ function renderPortableText(blocks, config) {
         html += `<figcaption>${escapeHtml(block.caption)}</figcaption>`;
       }
       html += "</figure>";
+    }
+
+    if (block._type === "divider") {
+      html += "<hr class=\"article-divider\" role=\"separator\">";
+      continue;
+    }
+
+    if (block._type === "callout") {
+      html += renderCalloutBlock(block, config);
     }
   }
 

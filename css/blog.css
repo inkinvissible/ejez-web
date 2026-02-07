@@ -329,6 +329,62 @@ body.blog-shell {
   color: var(--color-primary);
 }
 
+.article-divider {
+  margin: 1.7em 0 0;
+  border: 0;
+  border-top: 1px solid rgba(15, 45, 36, 0.2);
+}
+
+.article-callout {
+  margin: 1.5em 0 0;
+  padding: 16px 18px;
+  border: 1px solid rgba(15, 45, 36, 0.22);
+  border-radius: 14px;
+  background: rgba(15, 45, 36, 0.05);
+}
+
+.article-callout.is-info,
+.article-callout.is-note {
+  border-color: rgba(15, 45, 36, 0.26);
+  background: rgba(15, 45, 36, 0.06);
+}
+
+.article-callout.is-success,
+.article-callout.is-tip {
+  border-color: rgba(22, 101, 52, 0.28);
+  background: rgba(22, 101, 52, 0.08);
+}
+
+.article-callout.is-warning {
+  border-color: rgba(180, 83, 9, 0.34);
+  background: rgba(180, 83, 9, 0.08);
+}
+
+.article-callout.is-danger,
+.article-callout.is-critical {
+  border-color: rgba(153, 27, 27, 0.35);
+  background: rgba(153, 27, 27, 0.08);
+}
+
+.article-callout-title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+  color: var(--color-primary);
+}
+
+.article-callout-body {
+  margin-top: 10px;
+}
+
+.article-callout-body > *:first-child {
+  margin-top: 0;
+}
+
+.article-callout-body > *:last-child {
+  margin-bottom: 0;
+}
+
 .article-list {
   margin: 1.15em 0 0;
   padding: 0;
@@ -351,6 +407,22 @@ body.blog-shell {
   height: 7px;
   border-radius: 50%;
   background: rgba(74, 47, 34, 0.7);
+}
+
+.article-checklist li {
+  padding-left: 28px;
+}
+
+.article-checklist li::before {
+  content: "✓";
+  top: 0.03em;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 0.98rem;
+  font-weight: 600;
 }
 
 ol.article-list {
