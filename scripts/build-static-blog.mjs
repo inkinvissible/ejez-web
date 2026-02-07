@@ -174,10 +174,11 @@ function readTableCell(cell) {
 function renderTableBlock(block) {
   const rows = Array.isArray(block.rows) ? block.rows : [];
   if (!rows.length) return "";
+  const caption = pickStringField(block, ["caption", "title", "label"]);
 
   const normalizedRows = rows
     .map((row) => {
-      const cells = Array.isArray(row?.cells) ? row.cells : [];
+      const cells = Array.isArray(row?.cells) ? row.cells : (Array.isArray(row) ? row : []);
       return cells.map(readTableCell);
     })
     .filter((cells) => cells.length > 0);
@@ -185,7 +186,7 @@ function renderTableBlock(block) {
   if (!normalizedRows.length) return "";
 
   const useHeader = normalizedRows.length > 1;
-  let html = "<div class=\"article-table-wrap\"><table class=\"article-table\">";
+  let html = "<figure class=\"article-table-wrap\"><div class=\"article-table-scroll\"><table class=\"article-table\">";
 
   if (useHeader) {
     html += "<thead><tr>";
@@ -207,6 +208,10 @@ function renderTableBlock(block) {
     html += "</tr>";
   }
   html += "</tbody></table></div>";
+  if (caption) {
+    html += `<figcaption class="article-table-caption">${escapeHtml(caption)}</figcaption>`;
+  }
+  html += "</figure>";
 
   return html;
 }

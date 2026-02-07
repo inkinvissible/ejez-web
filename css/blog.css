@@ -478,6 +478,10 @@ ol.article-list li::before {
   border-radius: 16px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 242, 233, 0.88));
   box-shadow: 0 10px 24px rgba(15, 45, 36, 0.07);
+  overflow: hidden;
+}
+
+.article-table-scroll {
   overflow-x: auto;
 }
 
@@ -518,6 +522,15 @@ ol.article-list li::before {
 
 .article-table tbody tr:nth-child(even) {
   background: rgba(15, 45, 36, 0.03);
+}
+
+.article-table-caption {
+  margin: 0;
+  padding: 10px 14px 12px;
+  border-top: 1px solid rgba(15, 45, 36, 0.12);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--color-muted);
 }
 
 .article-state {

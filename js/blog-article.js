@@ -166,9 +166,10 @@
     if (!rows.length) {
       return "";
     }
+    var caption = pickStringField(block, ["caption", "title", "label"]);
 
     var normalizedRows = rows.map(function (row) {
-      var cells = Array.isArray(row && row.cells) ? row.cells : [];
+      var cells = Array.isArray(row && row.cells) ? row.cells : (Array.isArray(row) ? row : []);
       return cells.map(readTableCell);
     }).filter(function (cells) {
       return cells.length > 0;
@@ -179,7 +180,7 @@
     }
 
     var useHeader = normalizedRows.length > 1;
-    var parts = ["<div class=\"article-table-wrap\"><table class=\"article-table\">"];
+    var parts = ["<figure class=\"article-table-wrap\"><div class=\"article-table-scroll\"><table class=\"article-table\">"];
 
     if (useHeader) {
       parts.push("<thead><tr>");
@@ -201,6 +202,10 @@
       parts.push("</tr>");
     });
     parts.push("</tbody></table></div>");
+    if (caption) {
+      parts.push("<figcaption class=\"article-table-caption\">" + window.SanityBridge.escapeHtml(caption) + "</figcaption>");
+    }
+    parts.push("</figure>");
 
     return parts.join("");
   }
