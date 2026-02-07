@@ -11,6 +11,32 @@
     return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
   }
 
+  function sanitizeDocType(value) {
+    var type = String(value || "").trim();
+    if (!/^[A-Za-z0-9_-]+$/.test(type)) {
+      return "";
+    }
+    return type;
+  }
+
+  function buildTypeFilter(postTypes) {
+    var values = Array.isArray(postTypes) ? postTypes : [postTypes];
+    var sanitized = values
+      .map(sanitizeDocType)
+      .filter(function (type, index, list) {
+        return Boolean(type) && list.indexOf(type) === index;
+      });
+    if (!sanitized.length) {
+      return "";
+    }
+    if (sanitized.length === 1) {
+      return "_type == \"" + escapeForGroq(sanitized[0]) + "\"";
+    }
+    return "_type in [" + sanitized.map(function (type) {
+      return "\"" + escapeForGroq(type) + "\"";
+    }).join(", ") + "]";
+  }
+
   function buildKindsFilter(kinds) {
     if (!Array.isArray(kinds) || kinds.length === 0) {
       return "";
@@ -30,13 +56,16 @@
     }).join(", ") + "]";
   }
 
-  function buildListQuery(postType, kinds, publishedOnly) {
+  function buildListQuery(postTypes, kinds, publishedOnly) {
+    var typeFilter = buildTypeFilter(postTypes);
     var kindsFilter = buildKindsFilter(kinds);
     var publishFilter = publishedOnly ? " && defined(publishedAt) && publishedAt <= now()" : "";
+    var baseFilter = (typeFilter ? typeFilter + " && " : "") + "defined(title) && defined(slug.current)";
     return [
-      "*[_type == \"" + postType + "\" && defined(slug.current)" + publishFilter + kindsFilter + "]",
-      "| order(publishedAt desc)[0...24]{",
+      "*[" + baseFilter + publishFilter + kindsFilter + "]",
+      "| order(publishedAt desc, _updatedAt desc)[0...24]{",
       "  _id,",
+      "  \"docType\": _type,",
       "  kind,",
       "  title,",
       "  \"slug\": slug.current,",
@@ -114,7 +143,10 @@
     feed.innerHTML = posts.map(function (post) {
       var slug = window.SanityBridge.sanitizeSlug(post.slug);
       var kind = window.SanityBridge.sanitizeSlug(post.kind || "");
-      var articleUrl = "article.html?slug=" + encodeURIComponent(slug) + (kind ? "&kind=" + encodeURIComponent(kind) : "");
+      var docType = sanitizeDocType(post.docType || "");
+      var articleUrl = "article.html?slug=" + encodeURIComponent(slug) +
+        (kind ? "&kind=" + encodeURIComponent(kind) : "") +
+        (docType ? "&type=" + encodeURIComponent(docType) : "");
       var dateText = window.SanityBridge.formatDate(post.publishedAt);
       var excerpt = clampText(post.excerpt, 170);
       var authorText = getAuthorText(post);
@@ -183,13 +215,23 @@
 
     try {
       feed.setAttribute("aria-busy", "true");
-      var postType = window.SanityBridge.getConfig().postType;
+      var postType = sanitizeDocType(window.SanityBridge.getConfig().postType);
       var entryKinds = window.SanityBridge.getConfig().entryKinds || [];
-      var posts = await window.SanityBridge.fetchQuery(buildListQuery(postType, entryKinds, true), { cache: false, fresh: true });
+      var primaryTypes = postType ? [postType] : [];
+      var fallbackTypes = [postType, "entry", "post", "article", "blogPost", "blog", "nota"]
+        .map(sanitizeDocType)
+        .filter(function (type, index, list) {
+          return Boolean(type) && list.indexOf(type) === index;
+        });
+
+      var posts = await window.SanityBridge.fetchQuery(buildListQuery(primaryTypes, entryKinds, true), { cache: false, fresh: true });
+      if (!Array.isArray(posts) || posts.length === 0) {
+        posts = await window.SanityBridge.fetchQuery(buildListQuery(fallbackTypes, [], true), { cache: false, fresh: true });
+      }
       feed.removeAttribute("aria-busy");
 
       if (!Array.isArray(posts) || posts.length === 0) {
-        var allEntries = await window.SanityBridge.fetchQuery(buildListQuery(postType, entryKinds, false), { cache: false, fresh: true });
+        var allEntries = await window.SanityBridge.fetchQuery(buildListQuery(fallbackTypes, [], false), { cache: false, fresh: true });
         if (Array.isArray(allEntries) && allEntries.length > 0) {
           var publishSummary = summarizePublishState(allEntries);
           renderState(
@@ -204,7 +246,7 @@
 
         renderState(
           "Sin artículos publicados",
-          "No encontramos entradas del tipo configurado. Revisá `postType` y `entryKinds` en js/sanity-config.js.",
+          "No encontramos entradas publicadas. Revisá que el documento esté publicado (no solo guardado en draft) y que `postType` en js/sanity-config.js coincida con tu schema.",
           false
         );
         return;

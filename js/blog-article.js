@@ -24,6 +24,41 @@
     return window.SanityBridge.sanitizeSlug(params.get("kind"));
   }
 
+  function sanitizeDocType(value) {
+    var type = String(value || "").trim();
+    if (!/^[A-Za-z0-9_-]+$/.test(type)) {
+      return "";
+    }
+    return type;
+  }
+
+  function getTypeFromSearch() {
+    var params = new URLSearchParams(window.location.search);
+    return sanitizeDocType(params.get("type"));
+  }
+
+  function escapeForGroq(value) {
+    return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
+  }
+
+  function buildTypeFilter(types) {
+    var list = Array.isArray(types) ? types : [types];
+    var sanitized = list
+      .map(sanitizeDocType)
+      .filter(function (type, index, items) {
+        return Boolean(type) && items.indexOf(type) === index;
+      });
+    if (!sanitized.length) {
+      return "defined(_type)";
+    }
+    if (sanitized.length === 1) {
+      return "_type == \"" + escapeForGroq(sanitized[0]) + "\"";
+    }
+    return "_type in [" + sanitized.map(function (type) {
+      return "\"" + escapeForGroq(type) + "\"";
+    }).join(", ") + "]";
+  }
+
   function setMetaTag(selector, value) {
     var tag = document.querySelector(selector);
     if (!tag) {
@@ -55,7 +90,7 @@
   }
 
   function markWrapper(mark, text, markDefs) {
-    if (mark === "strong") {
+    if (mark === "strong" || mark === "bold" || mark === "b") {
       return "<strong>" + text + "</strong>";
     }
     if (mark === "em") {
@@ -459,41 +494,53 @@
       return;
     }
 
-    var postType = window.SanityBridge.getConfig().postType;
+    var postType = sanitizeDocType(window.SanityBridge.getConfig().postType);
+    var requestedType = getTypeFromSearch();
+    var fallbackTypeFilter = buildTypeFilter([postType, "entry", "post", "article", "blogPost", "blog", "nota"]);
     var kindFilter = kind ? " && kind == \"" + kind + "\"" : "";
-    var query = [
-      "*[_type == \"" + postType + "\" && slug.current == \"" + slug + "\" && defined(publishedAt) && publishedAt <= now()" + kindFilter + "] | order(publishedAt desc)[0]{",
-      "  _id,",
-      "  kind,",
-      "  title,",
-      "  \"slug\": slug.current,",
-      "  \"excerpt\": coalesce(excerpt, seo.metaDescription, \"\"),",
-      "  publishedAt,",
-      "  readingTime,",
-      "  canonicalUrl,",
-      "  \"coverAssetRef\": coverImage.asset->_ref,",
-      "  \"coverUrl\": coverImage.asset->url,",
-      "  \"coverAlt\": coalesce(coverImage.alt, title),",
-      "  \"authorName\": coalesce(authors[0]->name, \"Equipo EJEZ\"),",
-      "  \"seoMetaTitle\": seo.metaTitle,",
-      "  \"seoMetaDescription\": seo.metaDescription,",
-      "  \"seoOgAssetRef\": seo.ogImage.asset->_ref,",
-      "  body[]{",
-      "    ...,",
-      "    _type == \"image\" => {",
-      "      \"_type\": \"image\",",
-      "      \"assetRef\": asset._ref,",
-      "      \"assetUrl\": asset->url,",
-      "      \"alt\": coalesce(alt, \"Imagen del artículo\"),",
-      "      \"caption\": caption",
-      "    }",
-      "  }",
-      "}"
-    ].join("\n");
+    function buildArticleQuery(typeFilter) {
+      return [
+        "*[" + typeFilter + " && slug.current == \"" + escapeForGroq(slug) + "\" && defined(publishedAt) && publishedAt <= now()" + kindFilter + "] | order(publishedAt desc, _updatedAt desc)[0]{",
+        "  _id,",
+        "  \"docType\": _type,",
+        "  kind,",
+        "  title,",
+        "  \"slug\": slug.current,",
+        "  \"excerpt\": coalesce(excerpt, seo.metaDescription, \"\"),",
+        "  publishedAt,",
+        "  readingTime,",
+        "  canonicalUrl,",
+        "  \"coverAssetRef\": coverImage.asset->_ref,",
+        "  \"coverUrl\": coverImage.asset->url,",
+        "  \"coverAlt\": coalesce(coverImage.alt, title),",
+        "  \"authorName\": coalesce(authors[0]->name, \"Equipo EJEZ\"),",
+        "  \"seoMetaTitle\": seo.metaTitle,",
+        "  \"seoMetaDescription\": seo.metaDescription,",
+        "  \"seoOgAssetRef\": seo.ogImage.asset->_ref,",
+        "  body[]{",
+        "    ...,",
+        "    _type == \"image\" => {",
+        "      \"_type\": \"image\",",
+        "      \"assetRef\": asset._ref,",
+        "      \"assetUrl\": asset->url,",
+        "      \"alt\": coalesce(alt, \"Imagen del artículo\"),",
+        "      \"caption\": caption",
+        "    }",
+        "  }",
+        "}"
+      ].join("\n");
+    }
 
     try {
       articleContainer.setAttribute("aria-busy", "true");
-      var post = await window.SanityBridge.fetchQuery(query, { cache: true });
+      var post = null;
+      if (requestedType) {
+        var requestedTypeFilter = buildTypeFilter([requestedType]);
+        post = await window.SanityBridge.fetchQuery(buildArticleQuery(requestedTypeFilter), { cache: true });
+      }
+      if (!post) {
+        post = await window.SanityBridge.fetchQuery(buildArticleQuery(fallbackTypeFilter), { cache: true });
+      }
       if (!post) {
         showState(
           "Artículo no disponible",

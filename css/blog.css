@@ -294,6 +294,12 @@ body.blog-shell {
   color: var(--color-primary);
 }
 
+.article-body strong,
+.article-body b {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
 .article-body a {
   color: var(--color-secondary);
   text-decoration: underline;

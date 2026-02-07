@@ -103,6 +103,22 @@ function buildKindsFilter(kinds) {
   return ` && kind in [${sanitized.map((kind) => `"${kind}"`).join(", ")}]`;
 }
 
+function sanitizeDocType(value) {
+  const type = String(value || "").trim();
+  if (!/^[A-Za-z0-9_-]+$/.test(type)) return "";
+  return type;
+}
+
+function buildPostTypeFilter(postTypes) {
+  const list = Array.isArray(postTypes) ? postTypes : [postTypes];
+  const sanitized = list
+    .map(sanitizeDocType)
+    .filter((type, index, values) => Boolean(type) && values.indexOf(type) === index);
+  if (!sanitized.length) return "";
+  if (sanitized.length === 1) return `_type == "${sanitized[0]}"`;
+  return `_type in [${sanitized.map((type) => `"${type}"`).join(", ")}]`;
+}
+
 function renderSpanText(block) {
   const markDefs = new Map((block.markDefs || []).map((item) => [item._key, item]));
   const children = Array.isArray(block.children) ? block.children : [];
@@ -113,7 +129,7 @@ function renderSpanText(block) {
     const marks = Array.isArray(child.marks) ? child.marks : [];
 
     for (const mark of marks) {
-      if (mark === "strong") {
+      if (mark === "strong" || mark === "bold" || mark === "b") {
         html = `<strong>${html}</strong>`;
       } else if (mark === "em") {
         html = `<em>${html}</em>`;
@@ -669,41 +685,60 @@ async function sanityFetchQuery(query, config) {
 }
 
 async function getEntries(config) {
-  const kindsFilter = buildKindsFilter(config.entryKinds);
-  const query = [
-    `*[_type == "${config.postType}" && defined(slug.current) && defined(publishedAt) && publishedAt <= now()${kindsFilter}]`,
-    "| order(publishedAt desc){",
-    "  _id,",
-    "  kind,",
-    "  title,",
-    "  \"slug\": slug.current,",
-    "  excerpt,",
-    "  publishedAt,",
-    "  readingTime,",
-    "  canonicalUrl,",
-    "  \"coverAssetRef\": coverImage.asset._ref,",
-    "  \"coverUrl\": coverImage.asset->url,",
-    "  \"coverAlt\": coalesce(coverImage.alt, title),",
-    "  \"seoMetaTitle\": seo.metaTitle,",
-    "  \"seoMetaDescription\": seo.metaDescription,",
-    "  \"seoOgAssetRef\": seo.ogImage.asset._ref,",
-    "  \"authorNames\": coalesce(authors[]->name, []),",
-    "  \"tagTitles\": coalesce(tags[]->title, []),",
-    "  body[]{",
-    "    ...,",
-    "    _type == \"image\" => {",
-    "      \"_type\": \"image\",",
-    "      \"assetRef\": asset._ref,",
-    "      \"assetUrl\": asset->url,",
-    "      \"alt\": coalesce(alt, \"Imagen del artículo\"),",
-    "      \"caption\": caption",
-    "    }",
-    "  }",
-    "}"
-  ].join("\n");
+  const buildEntriesQuery = (postTypes, kinds) => {
+    const kindsFilter = buildKindsFilter(kinds);
+    const typeFilter = buildPostTypeFilter(postTypes);
+    const filter = `${typeFilter ? `${typeFilter} && ` : ""}defined(title) && defined(slug.current) && defined(publishedAt) && publishedAt <= now()${kindsFilter}`;
+    return [
+      `*[${filter}]`,
+      "| order(publishedAt desc){",
+      "  _id,",
+      "  kind,",
+      "  title,",
+      "  \"slug\": slug.current,",
+      "  excerpt,",
+      "  publishedAt,",
+      "  readingTime,",
+      "  canonicalUrl,",
+      "  \"coverAssetRef\": coverImage.asset._ref,",
+      "  \"coverUrl\": coverImage.asset->url,",
+      "  \"coverAlt\": coalesce(coverImage.alt, title),",
+      "  \"seoMetaTitle\": seo.metaTitle,",
+      "  \"seoMetaDescription\": seo.metaDescription,",
+      "  \"seoOgAssetRef\": seo.ogImage.asset._ref,",
+      "  \"authorNames\": coalesce(authors[]->name, []),",
+      "  \"tagTitles\": coalesce(tags[]->title, []),",
+      "  body[]{",
+      "    ...,",
+      "    _type == \"image\" => {",
+      "      \"_type\": \"image\",",
+      "      \"assetRef\": asset._ref,",
+      "      \"assetUrl\": asset->url,",
+      "      \"alt\": coalesce(alt, \"Imagen del artículo\"),",
+      "      \"caption\": caption",
+      "    }",
+      "  }",
+      "}"
+    ].join("\n");
+  };
 
-  const entries = await sanityFetchQuery(query, config);
-  return Array.isArray(entries) ? entries : [];
+  const primaryTypes = [config.postType];
+  let entries = await sanityFetchQuery(buildEntriesQuery(primaryTypes, config.entryKinds), config);
+  if (Array.isArray(entries) && entries.length > 0) {
+    return entries;
+  }
+
+  const fallbackTypes = [config.postType, "entry", "post", "article", "blogPost", "blog", "nota"]
+    .map(sanitizeDocType)
+    .filter((type, index, list) => Boolean(type) && list.indexOf(type) === index);
+
+  entries = await sanityFetchQuery(buildEntriesQuery(fallbackTypes, []), config);
+  if (Array.isArray(entries) && entries.length > 0) {
+    console.warn(`No entries for configured postType "${config.postType}". Using fallback types: ${fallbackTypes.join(", ")}.`);
+    return entries;
+  }
+
+  return [];
 }
 
 async function getSiteSettings(config) {
