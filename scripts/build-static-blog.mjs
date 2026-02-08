@@ -580,7 +580,10 @@ function renderArticlePage(entry, config, siteSettings) {
 
   const authors = Array.isArray(entry.authorNames) && entry.authorNames.length ? entry.authorNames.filter(Boolean).join(", ") : "Equipo EJEZ";
   const readTime = Number(entry.readingTime) > 0 ? `${Math.round(entry.readingTime)} min de lectura` : "";
-  const publishLine = [formatDate(entry.publishedAt, config.defaultLocale), authors, readTime].filter(Boolean).join(" · ");
+  const publishMeta = [formatDate(entry.publishedAt, config.defaultLocale), authors, readTime]
+    .filter(Boolean)
+    .map((item) => `<span class="article-meta-item">${escapeHtml(item)}</span>`)
+    .join("");
   const articleBody = renderPortableText(entry.body, config);
 
   const jsonLdPayload = {
@@ -610,7 +613,7 @@ function renderArticlePage(entry, config, siteSettings) {
     ogImage,
     locale: config.defaultLocale
   })}
-<body class="blog-shell">
+<body class="blog-shell article-view">
 ${renderNav("blog")}
 <main class="article-main">
   <div class="container">
@@ -623,10 +626,10 @@ ${renderNav("blog")}
         <span>${escapeHtml(entry.title || "Artículo")}</span>
       </nav>
       <header class="article-header">
-        <p class="section-kicker">${escapeHtml(getKindLabel(entry.kind))}</p>
+        <p class="section-kicker" id="article-kicker">${escapeHtml(getKindLabel(entry.kind))}</p>
         <h1 class="section-title">${escapeHtml(entry.title || "Artículo sin título")}</h1>
         <p class="section-lead">${escapeHtml(entry.excerpt || description)}</p>
-        <p class="article-meta">${escapeHtml(publishLine)}</p>
+        <p class="article-meta">${publishMeta}</p>
       </header>
       <div class="article-cover">
         ${cover

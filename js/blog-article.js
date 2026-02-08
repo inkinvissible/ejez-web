@@ -5,6 +5,7 @@
   var heroTitle = document.getElementById("article-title");
   var heroExcerpt = document.getElementById("article-excerpt");
   var heroMeta = document.getElementById("article-meta");
+  var heroKicker = document.getElementById("article-kicker");
   var heroCover = document.getElementById("article-cover");
   var articleBody = document.getElementById("article-body");
   var breadcrumbCurrent = document.getElementById("breadcrumb-current");
@@ -73,6 +74,26 @@
       return;
     }
     link.setAttribute("href", url);
+  }
+
+  function getKindLabel(kind) {
+    var map = {
+      bitacora: "Bitacora",
+      nota: "Nota",
+      lab: "Lab"
+    };
+    return map[window.SanityBridge.sanitizeSlug(kind || "")] || "Publicación";
+  }
+
+  function setMetaItems(items) {
+    var list = Array.isArray(items) ? items.filter(Boolean) : [];
+    if (!list.length) {
+      heroMeta.textContent = "";
+      return;
+    }
+    heroMeta.innerHTML = list.map(function (item) {
+      return "<span class=\"article-meta-item\">" + window.SanityBridge.escapeHtml(item) + "</span>";
+    }).join("");
   }
 
   function normalizeUrl(url) {
@@ -397,6 +418,9 @@
   }
 
   function showState(title, description, errorState) {
+    if (heroKicker) {
+      heroKicker.textContent = errorState ? "Estado" : "Publicación";
+    }
     heroTitle.textContent = title;
     heroExcerpt.textContent = description;
     heroMeta.textContent = "";
@@ -409,6 +433,9 @@
       "<a class=\"btn-accent\" href=\"blog.html\">Volver al blog</a>",
       "</div>"
     ].join("");
+    if (articleContainer) {
+      articleContainer.removeAttribute("aria-busy");
+    }
   }
 
   function hydrateSeo(post, slug) {
@@ -440,13 +467,16 @@
   }
 
   function renderPost(post, slug) {
+    if (heroKicker) {
+      heroKicker.textContent = getKindLabel(post.kind);
+    }
     heroTitle.textContent = post.title || "Artículo sin título";
     heroExcerpt.textContent = post.excerpt || "Publicación del blog de EJEZ.";
-    heroMeta.textContent = [
+    setMetaItems([
       window.SanityBridge.formatDate(post.publishedAt),
       post.authorName || "Equipo EJEZ",
       Number(post.readingTime) > 0 ? String(Math.round(post.readingTime)) + " min de lectura" : ""
-    ].filter(Boolean).join(" · ");
+    ]);
 
     if (breadcrumbCurrent) {
       breadcrumbCurrent.textContent = post.title || "Artículo";
