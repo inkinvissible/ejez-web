@@ -80,9 +80,27 @@
   const tabs = document.querySelectorAll('[data-tab-target]');
   const tabContents = document.querySelectorAll('[data-tab-content]');
 
+  function refreshActiveProjectGrid(targetPanel) {
+    var $ = window.jQuery;
+    if (!$ || !$.fn || !$.fn.slick || !targetPanel) {
+      return;
+    }
+
+    window.requestAnimationFrame(function () {
+      var $targetGrid = $(targetPanel).find('.project-grid');
+      if ($targetGrid.length && $targetGrid.hasClass('slick-initialized')) {
+        $targetGrid.slick('setPosition');
+      }
+    });
+  }
+
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const target = document.querySelector(tab.dataset.tabTarget);
+      if (!target) {
+        return;
+      }
+
       tabContents.forEach(tabContent => {
         tabContent.classList.remove('active');
       });
@@ -91,6 +109,7 @@
       });
       tab.classList.add('active');
       target.classList.add('active');
+      refreshActiveProjectGrid(target);
     });
   });
 
@@ -152,27 +171,42 @@
     optionalPluginsReady = true;
 
     if ($.fn && $.fn.slick && $('.project-grid').length) {
-      $('.project-grid').slick({
-        infinite: true,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        dots: true,
-        responsive: [
-          {
-            breakpoint: 1200,
-            settings: {
-              slidesToShow: 2
+      $('.project-grid').each(function () {
+        var $projectGrid = $(this);
+        var totalProjects = $projectGrid.children('.project-style').length;
+
+        // Don't initialize Slick when there are 3 or fewer projects;
+        // the CSS layout already handles them at the correct size.
+        if (totalProjects <= 3) {
+          return;
+        }
+
+        var shouldLoop = totalProjects > 3;
+
+        $projectGrid.slick({
+          infinite: shouldLoop,
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          dots: shouldLoop,
+          arrows: shouldLoop,
+          responsive: [
+            {
+              breakpoint: 1200,
+              settings: {
+                slidesToShow: 2,
+                arrows: totalProjects > 2
+              }
+            },
+            {
+              breakpoint: 900,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: false
+              }
             }
-          },
-          {
-            breakpoint: 900,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
-              arrows: false
-            }
-          }
-        ]
+          ]
+        });
       });
     }
 
