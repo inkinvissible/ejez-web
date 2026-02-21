@@ -1227,7 +1227,7 @@ nav#navbar {
     border-radius: 999px;
     border: 1px solid rgba(74, 47, 34, 0.35);
     background: rgba(74, 47, 34, 0.08);
-    display: none;
+    display: inline-block;
 }
 #services .service-card-title {
     order: 1;
@@ -1306,10 +1306,6 @@ nav#navbar {
   }
 }
 
-.service-toggle-icon {
-    display: none;
-}
-
 @media only screen and (max-width: 1040px) {
   #services {
       padding: 120px 0;
@@ -1321,110 +1317,36 @@ nav#navbar {
 }
 
 @media only screen and (max-width: 860px) {
-  #services .service-stack {
-      gap: 15px; /* Tighter gap for accordion */
+  #services .services-stack {
+      gap: 20px;
+  }
+  #services .service-card {
+      padding: 30px 26px 28px;
+      border-radius: 18px;
   }
   #services .service-card-top {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      cursor: pointer;
-      width: 100%;
-      position: relative;
-      z-index: 5;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
   }
   #services .service-card-number {
       order: 0;
       margin-left: 0;
       display: inline-block;
-      font-size: 0.65rem;
-      padding: 5px 10px;
+      font-size: 0.68rem;
+      padding: 6px 11px;
   }
   #services .service-card-title {
-      font-size: 1.1rem;
-      flex: 1;
+      font-size: clamp(1.34rem, 5.4vw, 1.68rem);
       margin: 0;
-      max-width: none;
+      max-width: 100%;
       text-align: left;
   }
-  
-  /* Accordion Toggle Icon */
-  .service-toggle-icon {
-      display: block;
-      width: 14px;
-      height: 14px;
-      position: relative;
-      flex-shrink: 0;
-  }
-  .service-toggle-icon::before,
-  .service-toggle-icon::after {
-      content: "";
-      position: absolute;
-      background-color: var(--color-primary);
-      transition: transform 0.3s ease;
-      border-radius: 2px;
-  }
-  .service-toggle-icon::before {
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      margin-top: -1px;
-  }
-  .service-toggle-icon::after {
-      top: 0;
-      left: 50%;
-      width: 2px;
-      height: 100%;
-      margin-left: -1px;
-  }
-  #services .service-card.active .service-toggle-icon::after {
-      transform: rotate(90deg); /* Makes it a minus */
-  }
-
-  /* Card Styles */
-  #services .service-card {
-      padding: 20px 25px;
-      border-radius: 12px;
-      background: #fff;
-      transition: all 0.3s ease;
-      min-height: auto; /* Allow collapsing */
-  }
-  #services .service-card.active {
-      padding: 30px 25px 35px;
-      background: linear-gradient(130deg, rgba(255, 255, 255, 0.95), rgba(245, 240, 230, 0.8));
-      border-color: rgba(15, 45, 36, 0.24);
-      box-shadow: 0 12px 30px rgba(15, 45, 36, 0.12);
-  }
-
-  /* Watermark adjustments */
-  .service-watermark {
-      font-size: 6rem;
-      top: 10px;
-      right: 10px;
-      opacity: 0.03;
-      display: none; /* Hide on collapsed */
-  }
-  #services .service-card.active .service-watermark {
-      display: block;
-  }
-
-  /* Content Visibility */
   #services .service-card-body {
-      display: none;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(15, 45, 36, 0.08);
+      margin-top: 18px;
       max-width: 100%;
       gap: 16px;
   }
-  #services .service-card.active .service-card-body {
-      display: flex;
-      animation: fadeIn 0.4s ease;
-  }
-  
-  /* Additional Mobile Adjustments */
   #services .service-case-title {
       margin-top: 28px;
   }
@@ -1432,11 +1354,6 @@ nav#navbar {
       grid-template-columns: 1fr;
       gap: 9px;
   }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 @media only screen and (max-width: 620px) {
@@ -1676,7 +1593,7 @@ nav#navbar {
 }
 
 /* Progressive Enhancement: Only hide if JS is active */
-.timeline-container.js-active .timeline-content {
+.timeline-container.js-active.is-enhanced .timeline-content {
     opacity: 0;
     transform: translateY(30px);
 }
@@ -1692,7 +1609,7 @@ nav#navbar {
 }
 
 /* Active State (Scroll Triggered) */
-.timeline-container.js-active .timeline-item.visible .timeline-content {
+.timeline-container.js-active.is-enhanced .timeline-item.visible .timeline-content {
     opacity: 1;
     transform: translateY(0);
 }

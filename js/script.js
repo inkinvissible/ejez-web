@@ -407,29 +407,6 @@
   });
 
 
-  // Service Accordion for Mobile
-  const serviceCards = document.querySelectorAll('.service-card');
-  
-  serviceCards.forEach(card => {
-    const header = card.querySelector('.service-card-top');
-    if (header) {
-      header.addEventListener('click', () => {
-        // Only activate on mobile/tablet where the layout changes
-        if (window.innerWidth > 860) return;
-
-        const isActive = card.classList.contains('active');
-        
-        // Close all others to mimic accordion behavior
-        serviceCards.forEach(c => c.classList.remove('active'));
-        
-        // If it wasn't active, open it. If it was active, it stays closed (toggled off above)
-        if (!isActive) {
-          card.classList.add('active');
-        }
-      });
-    }
-  });
-
   // Timeline Scroll Animation
   const timelineContainer = document.querySelector('.timeline-container');
   const timelineItems = document.querySelectorAll('.timeline-item');
@@ -437,30 +414,47 @@
 
   if (timelineContainer && timelineItems.length) {
     timelineContainer.classList.add('js-active');
-    
-    // 1. Scroll Triggered (Reveal Items)
-    const observerOptions = {
-      threshold: 0.15,
-      rootMargin: "0px 0px -50px 0px"
+    const revealAllTimelineItems = () => {
+      timelineItems.forEach((item) => item.classList.add('visible'));
+      if (timelineProgress) {
+        timelineProgress.style.height = '100%';
+      }
     };
 
-    const timelineObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        } else {
-          // If element is leaving towards the bottom (top > 0), it means we scrolled UP past it.
-          // Remove the class to allow re-animation when scrolling back down.
-          if (entry.boundingClientRect.top > 0) {
+    if ("IntersectionObserver" in window) {
+      timelineContainer.classList.add('is-enhanced');
+
+      // 1. Scroll Triggered (Reveal Items)
+      const observerOptions = {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+      };
+
+      const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else if (entry.boundingClientRect.top > 0) {
+            // If element leaves while scrolling up, reset animation for next pass.
             entry.target.classList.remove('visible');
           }
-        }
-      });
-    }, observerOptions);
+        });
+      }, observerOptions);
 
-    timelineItems.forEach(item => {
-      timelineObserver.observe(item);
-    });
+      timelineItems.forEach(item => {
+        timelineObserver.observe(item);
+      });
+
+      // Fail-safe: if browser observer quirks prevent reveals, keep timeline readable.
+      window.setTimeout(() => {
+        if (!timelineContainer.querySelector('.timeline-item.visible')) {
+          timelineContainer.classList.remove('is-enhanced');
+          revealAllTimelineItems();
+        }
+      }, 1400);
+    } else {
+      revealAllTimelineItems();
+    }
 
     // 2. Scroll Linked (Progress Line)
     let timelineTicking = false;
@@ -475,6 +469,10 @@
       
       const viewportCenter = windowHeight / 2;
       const distFromTop = viewportCenter - rect.top;
+      if (rect.height <= 0) {
+        timelineTicking = false;
+        return;
+      }
       let percentage = (distFromTop / rect.height) * 100;
       
       // Clamp between 0 and 100
