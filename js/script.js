@@ -436,6 +436,8 @@
   const timelineProgress = document.querySelector('.timeline-progress');
 
   if (timelineContainer && timelineItems.length) {
+    timelineContainer.classList.add('js-active');
+    
     // 1. Scroll Triggered (Reveal Items)
     const observerOptions = {
       threshold: 0.15,
