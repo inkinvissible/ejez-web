@@ -407,5 +407,86 @@
   });
 
 
+  // Service Accordion for Mobile
+  const serviceCards = document.querySelectorAll('.service-card');
+  
+  serviceCards.forEach(card => {
+    const header = card.querySelector('.service-card-top');
+    if (header) {
+      header.addEventListener('click', () => {
+        // Only activate on mobile/tablet where the layout changes
+        if (window.innerWidth > 860) return;
+
+        const isActive = card.classList.contains('active');
+        
+        // Close all others to mimic accordion behavior
+        serviceCards.forEach(c => c.classList.remove('active'));
+        
+        // If it wasn't active, open it. If it was active, it stays closed (toggled off above)
+        if (!isActive) {
+          card.classList.add('active');
+        }
+      });
+    }
+  });
+
+  // Timeline Scroll Animation
+  const timelineContainer = document.querySelector('.timeline-container');
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  const timelineProgress = document.querySelector('.timeline-progress');
+
+  if (timelineContainer && timelineItems.length) {
+    // 1. Scroll Triggered (Reveal Items)
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: "0px 0px -50px 0px"
+    };
+
+    const timelineObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    timelineItems.forEach(item => {
+      timelineObserver.observe(item);
+    });
+
+    // 2. Scroll Linked (Progress Line)
+    let timelineTicking = false;
+
+    function updateTimelineProgress() {
+      const rect = timelineContainer.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      
+      // Calculate progress: 0% when top of container is at center of screen, 
+      // 100% when bottom of container is at center of screen.
+      // Formula: (WindowCenter - ContainerTop) / ContainerHeight
+      
+      const viewportCenter = windowHeight / 2;
+      const distFromTop = viewportCenter - rect.top;
+      let percentage = (distFromTop / rect.height) * 100;
+      
+      // Clamp between 0 and 100
+      percentage = Math.max(0, Math.min(100, percentage));
+      
+      if (timelineProgress) {
+        timelineProgress.style.height = percentage + '%';
+      }
+      timelineTicking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!timelineTicking) {
+        window.requestAnimationFrame(updateTimelineProgress);
+        timelineTicking = true;
+      }
+    }, { passive: true });
+    
+    // Initial call
+    updateTimelineProgress();
+  }
 
 })();
