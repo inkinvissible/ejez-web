@@ -446,6 +446,12 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
+        } else {
+          // If element is leaving towards the bottom (top > 0), it means we scrolled UP past it.
+          // Remove the class to allow re-animation when scrolling back down.
+          if (entry.boundingClientRect.top > 0) {
+            entry.target.classList.remove('visible');
+          }
         }
       });
     }, observerOptions);
