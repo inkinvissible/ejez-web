@@ -2,6 +2,68 @@
 
   "use strict";
 
+  // Service Card Toggle (Mobile)
+  try {
+    const serviceCards = document.querySelectorAll('.service-card');
+    const mobileServiceQuery = window.matchMedia('(max-width: 860px)');
+
+    if (serviceCards.length) {
+      const setExpandedState = (card, shouldExpand) => {
+        const toggleButton = card.querySelector('.service-toggle-btn');
+        const details = card.querySelector('.service-card-details');
+        const toggleLabel = card.querySelector('.service-toggle-label');
+
+        if (!toggleButton || !details) {
+          return;
+        }
+
+        const isMobile = mobileServiceQuery.matches;
+        const expanded = isMobile ? shouldExpand : true;
+
+        card.classList.toggle('is-collapsible', isMobile);
+        card.classList.toggle('active', isMobile && expanded);
+        toggleButton.setAttribute('aria-expanded', String(expanded));
+        details.setAttribute('aria-hidden', String(!expanded));
+
+        if (toggleLabel) {
+          toggleLabel.textContent = expanded ? 'Ocultar detalles' : 'Ver detalles';
+        }
+      };
+
+      serviceCards.forEach((card) => {
+        const toggleButton = card.querySelector('.service-toggle-btn');
+        if (!toggleButton) {
+          return;
+        }
+
+        toggleButton.addEventListener('click', () => {
+          if (!mobileServiceQuery.matches) {
+            return;
+          }
+          const nextState = !card.classList.contains('active');
+          setExpandedState(card, nextState);
+        });
+      });
+
+      const syncServiceCards = () => {
+        serviceCards.forEach((card) => {
+          const isActive = card.classList.contains('active');
+          setExpandedState(card, isActive);
+        });
+      };
+
+      if (typeof mobileServiceQuery.addEventListener === 'function') {
+        mobileServiceQuery.addEventListener('change', syncServiceCards);
+      } else if (typeof mobileServiceQuery.addListener === 'function') {
+        mobileServiceQuery.addListener(syncServiceCards);
+      }
+
+      syncServiceCards();
+    }
+  } catch (e) {
+    console.error("Service toggle init error:", e);
+  }
+
   // Sticky header reveal after initial scroll
   var headerWrap = document.getElementById("header-wrap");
   var header = document.getElementById("header");
@@ -414,58 +476,70 @@
 
   if (timelineContainer && timelineItems.length) {
     timelineContainer.classList.add('js-active');
-    const revealAllTimelineItems = () => {
-      timelineItems.forEach((item) => item.classList.add('visible'));
-      if (timelineProgress) {
-        timelineProgress.style.height = '100%';
+
+    // Function to reveal items
+    const revealItem = (item) => {
+      if (item.classList.contains('visible')) {
+        return;
       }
+      item.classList.add('visible');
     };
 
-    if ("IntersectionObserver" in window) {
+    timelineItems.forEach((item, index) => {
+      const delayMs = Math.min(index, 6) * 70;
+      item.style.setProperty('--timeline-delay', delayMs + 'ms');
+    });
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      timelineItems.forEach(revealItem);
+    } else if ("IntersectionObserver" in window) {
       timelineContainer.classList.add('is-enhanced');
 
-      // 1. Scroll Triggered (Reveal Items)
       const observerOptions = {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px"
+        threshold: 0.12,
+        rootMargin: "0px 0px -6% 0px"
       };
 
       const timelineObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          } else if (entry.boundingClientRect.top > 0) {
-            // If element leaves while scrolling up, reset animation for next pass.
-            entry.target.classList.remove('visible');
+            window.requestAnimationFrame(() => {
+              revealItem(entry.target);
+              timelineObserver.unobserve(entry.target);
+            });
           }
         });
       }, observerOptions);
 
-      timelineItems.forEach(item => {
-        timelineObserver.observe(item);
+      window.requestAnimationFrame(() => {
+        timelineContainer.classList.add('is-ready');
+        timelineItems.forEach(item => {
+          timelineObserver.observe(item);
+        });
       });
-
+      
       // Fail-safe: if browser observer quirks prevent reveals, keep timeline readable.
       window.setTimeout(() => {
         if (!timelineContainer.querySelector('.timeline-item.visible')) {
           timelineContainer.classList.remove('is-enhanced');
-          revealAllTimelineItems();
+          timelineContainer.classList.remove('is-ready');
+          timelineItems.forEach(revealItem);
         }
-      }, 1400);
+      }, 2500);
+
     } else {
-      revealAllTimelineItems();
+      // Fallback for no IntersectionObserver
+      timelineItems.forEach(revealItem);
     }
 
-    // 2. Scroll Linked (Progress Line)
+    // Scroll Linked (Progress Line)
     let timelineTicking = false;
 
     function updateTimelineProgress() {
       const rect = timelineContainer.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      
-      // Calculate progress: 0% when top of container is at center of screen, 
-      // 100% when bottom of container is at center of screen.
-      // Formula: (WindowCenter - ContainerTop) / ContainerHeight
       
       const viewportCenter = windowHeight / 2;
       const distFromTop = viewportCenter - rect.top;
@@ -475,7 +549,6 @@
       }
       let percentage = (distFromTop / rect.height) * 100;
       
-      // Clamp between 0 and 100
       percentage = Math.max(0, Math.min(100, percentage));
       
       if (timelineProgress) {
@@ -491,7 +564,6 @@
       }
     }, { passive: true });
     
-    // Initial call
     updateTimelineProgress();
   }
 
