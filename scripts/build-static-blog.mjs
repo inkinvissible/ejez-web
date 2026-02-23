@@ -362,13 +362,24 @@ function articleFileName(entry) {
   return `article-${kind}-${slug}.html`;
 }
 
+function articleRouteSlug(entry) {
+  const kind = slugify(entry.kind || "entry");
+  const slug = slugify(entry.slug || "sin-slug");
+  return `${kind}-${slug}`;
+}
+
+function articleRoutePath(entry) {
+  return `blog/${articleRouteSlug(entry)}/`;
+}
+
 function pageHead({
   title,
   description,
   canonical,
   ogType,
   ogImage,
-  locale
+  locale,
+  baseHref
 }) {
   return `<!DOCTYPE html>
 <html lang="${escapeHtml(locale)}">
@@ -380,6 +391,7 @@ function pageHead({
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#F5F0E6">
+  ${baseHref ? `<base href="${escapeHtml(baseHref)}">` : ""}
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}">
   <link rel="canonical" href="${escapeHtml(canonical)}">
@@ -476,7 +488,7 @@ function blogCard(entry, config) {
   const authors = Array.isArray(entry.authorNames) && entry.authorNames.length ? entry.authorNames.filter(Boolean).join(", ") : "Equipo EJEZ";
   const readTime = Number(entry.readingTime) > 0 ? ` · ${Math.round(entry.readingTime)} min` : "";
   const excerpt = String(entry.excerpt || "").trim() || "Sin extracto disponible para este artículo.";
-  const href = entry.canonicalUrl || `${config.siteUrl}/${articleFileName(entry)}`;
+  const href = `${config.siteUrl}/${articleRoutePath(entry)}`;
 
   return `<article class="blog-card">
   <a class="blog-card-media" href="${escapeHtml(href)}" aria-label="Abrir artículo ${escapeHtml(entry.title || "sin título")}">
@@ -518,7 +530,8 @@ function renderBlogPage(entries, config, siteSettings) {
     canonical,
     ogType: "website",
     ogImage,
-    locale: config.defaultLocale
+    locale: config.defaultLocale,
+    baseHref: `${config.siteUrl}/`
   })}
 <body class="blog-shell">
 ${renderNav("blog")}
@@ -560,8 +573,7 @@ ${renderFooter(siteSettings.footerText)}
 function renderArticlePage(entry, config, siteSettings) {
   const entryTitle = entry.seoMetaTitle || entry.title || "Artículo";
   const description = entry.seoMetaDescription || entry.excerpt || siteSettings.siteDescription || "Artículo del blog de EJEZ.";
-  const fileName = articleFileName(entry);
-  const canonical = entry.canonicalUrl || `${config.siteUrl}/${fileName}`;
+  const canonical = entry.canonicalUrl || `${config.siteUrl}/${articleRoutePath(entry)}`;
 
   const cover = toImageUrl(entry.coverAssetRef || entry.coverUrl, config, {
     w: 1600,
@@ -611,7 +623,8 @@ function renderArticlePage(entry, config, siteSettings) {
     canonical,
     ogType: "article",
     ogImage,
-    locale: config.defaultLocale
+    locale: config.defaultLocale,
+    baseHref: `${config.siteUrl}/`
   })}
 <body class="blog-shell article-view">
 ${renderNav("blog")}
@@ -801,9 +814,13 @@ async function build() {
 
   for (const entry of entries) {
     const fileName = articleFileName(entry);
+    const routePath = articleRoutePath(entry);
     const html = renderArticlePage(entry, config, siteSettings);
     await fs.writeFile(path.join(outputDir, fileName), html, "utf8");
-    urls.push(entry.canonicalUrl || `${config.siteUrl}/${fileName}`);
+    await ensureDir(path.join(outputDir, routePath));
+    await fs.writeFile(path.join(outputDir, routePath, "index.html"), html, "utf8");
+    urls.push(entry.canonicalUrl || `${config.siteUrl}/${routePath}`);
+    console.log(`Rendered article: ${fileName} and ${routePath}index.html`);
   }
 
   await fs.writeFile(path.join(outputDir, "sitemap.xml"), sitemapXml(urls), "utf8");
