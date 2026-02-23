@@ -476,7 +476,7 @@ function blogCard(entry, config) {
   const authors = Array.isArray(entry.authorNames) && entry.authorNames.length ? entry.authorNames.filter(Boolean).join(", ") : "Equipo EJEZ";
   const readTime = Number(entry.readingTime) > 0 ? ` · ${Math.round(entry.readingTime)} min` : "";
   const excerpt = String(entry.excerpt || "").trim() || "Sin extracto disponible para este artículo.";
-  const href = articleFileName(entry);
+  const href = entry.canonicalUrl || `${config.siteUrl}/${articleFileName(entry)}`;
 
   return `<article class="blog-card">
   <a class="blog-card-media" href="${escapeHtml(href)}" aria-label="Abrir artículo ${escapeHtml(entry.title || "sin título")}">
@@ -691,14 +691,14 @@ async function getEntries(config) {
   const buildEntriesQuery = (postTypes, kinds) => {
     const kindsFilter = buildKindsFilter(kinds);
     const typeFilter = buildPostTypeFilter(postTypes);
-    const filter = `${typeFilter ? `${typeFilter} && ` : ""}defined(title) && defined(slug.current) && (!defined(publishedAt) || publishedAt <= now())${kindsFilter}`;
+    const filter = `${typeFilter ? `${typeFilter} && ` : ""}defined(title) && defined(coalesce(slug.current, slug)) && (!defined(publishedAt) || publishedAt <= now())${kindsFilter}`;
     return [
       `*[${filter}]`,
       "| order(coalesce(publishedAt, _createdAt) desc){",
       "  _id,",
       "  kind,",
       "  title,",
-      "  \"slug\": slug.current,",
+      "  \"slug\": coalesce(slug.current, slug),",
       "  excerpt,",
       "  publishedAt,",
       "  readingTime,",
