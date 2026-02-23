@@ -691,10 +691,10 @@ async function getEntries(config) {
   const buildEntriesQuery = (postTypes, kinds) => {
     const kindsFilter = buildKindsFilter(kinds);
     const typeFilter = buildPostTypeFilter(postTypes);
-    const filter = `${typeFilter ? `${typeFilter} && ` : ""}defined(title) && defined(slug.current) && defined(publishedAt) && publishedAt <= now()${kindsFilter}`;
+    const filter = `${typeFilter ? `${typeFilter} && ` : ""}defined(title) && defined(slug.current) && (!defined(publishedAt) || publishedAt <= now())${kindsFilter}`;
     return [
       `*[${filter}]`,
-      "| order(publishedAt desc){",
+      "| order(coalesce(publishedAt, _createdAt) desc){",
       "  _id,",
       "  kind,",
       "  title,",

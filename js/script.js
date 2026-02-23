@@ -477,61 +477,49 @@
   if (timelineContainer && timelineItems.length) {
     timelineContainer.classList.add('js-active');
 
-    // Function to reveal items
-    const revealItem = (item) => {
-      if (item.classList.contains('visible')) {
-        return;
-      }
-      item.classList.add('visible');
+    const setItemVisible = (item, shouldBeVisible) => {
+      item.classList.toggle('visible', shouldBeVisible);
     };
 
-    timelineItems.forEach((item, index) => {
-      const delayMs = Math.min(index, 6) * 70;
-      item.style.setProperty('--timeline-delay', delayMs + 'ms');
+    const inRevealZone = (item) => {
+      const rect = item.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      return rect.top <= viewportHeight * 0.82 && rect.bottom >= viewportHeight * 0.2;
+    };
+
+    timelineItems.forEach((item) => {
+      item.style.setProperty('--timeline-delay', '0ms');
     });
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
-      timelineItems.forEach(revealItem);
-    } else if ("IntersectionObserver" in window) {
+      timelineItems.forEach((item) => setItemVisible(item, true));
+    } else {
       timelineContainer.classList.add('is-enhanced');
+      let revealTicking = false;
 
-      const observerOptions = {
-        threshold: 0.12,
-        rootMargin: "0px 0px -6% 0px"
+      const syncTimelineVisibility = () => {
+        timelineItems.forEach((item) => {
+          setItemVisible(item, inRevealZone(item));
+        });
+        revealTicking = false;
       };
 
-      const timelineObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            window.requestAnimationFrame(() => {
-              revealItem(entry.target);
-              timelineObserver.unobserve(entry.target);
-            });
-          }
-        });
-      }, observerOptions);
+      const onTimelineScroll = () => {
+        if (revealTicking) {
+          return;
+        }
+        window.requestAnimationFrame(syncTimelineVisibility);
+        revealTicking = true;
+      };
 
       window.requestAnimationFrame(() => {
         timelineContainer.classList.add('is-ready');
-        timelineItems.forEach(item => {
-          timelineObserver.observe(item);
-        });
+        syncTimelineVisibility();
       });
-      
-      // Fail-safe: if browser observer quirks prevent reveals, keep timeline readable.
-      window.setTimeout(() => {
-        if (!timelineContainer.querySelector('.timeline-item.visible')) {
-          timelineContainer.classList.remove('is-enhanced');
-          timelineContainer.classList.remove('is-ready');
-          timelineItems.forEach(revealItem);
-        }
-      }, 2500);
-
-    } else {
-      // Fallback for no IntersectionObserver
-      timelineItems.forEach(revealItem);
+      window.addEventListener('scroll', onTimelineScroll, { passive: true });
+      window.addEventListener('resize', onTimelineScroll);
     }
 
     // Scroll Linked (Progress Line)
