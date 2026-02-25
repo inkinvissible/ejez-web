@@ -27,7 +27,7 @@ html {
   --color-text: #2B2B2B;
   --color-muted: #6F6A63;
   --color-line: rgba(15, 45, 36, 0.14);
-  --color-gray-box: rgba(15, 45, 36, 0.12);
+  --color-gray-box: rgba(20, 141, 62, 0.452);
 }
 @font-face {
   font-family: "Jost";
@@ -516,9 +516,9 @@ button,
     opacity: 0;
     transition: opacity 0.35s ease;
     background:
-      radial-gradient(390px circle at var(--mx, 50%) var(--my, 50%), rgba(74, 47, 34, 0.18), transparent 65%),
-      repeating-linear-gradient(110deg, rgba(15, 45, 36, 0.14) 0 1px, transparent 1px 36px),
-      repeating-linear-gradient(20deg, rgba(74, 47, 34, 0.10) 0 1px, transparent 1px 42px);
+      radial-gradient(390px circle at var(--mx, 50%) var(--my, 50%), rgba(40, 110, 65, 0.16), transparent 65%),
+      repeating-linear-gradient(110deg, rgba(40, 110, 65, 0.12) 0 1px, transparent 1px 36px),
+      repeating-linear-gradient(20deg, rgba(40, 110, 65, 0.08) 0 1px, transparent 1px 42px);
     filter: blur(0.6px);
 }
 .pattern-overlay:hover:after {
@@ -1520,7 +1520,7 @@ nav#navbar {
     background-color: var(--color-ivory);
     padding: 130px 0;
     position: relative;
-    overflow: hidden;
+    overflow: clip;
 }
 #projects .grid {
     justify-content: start;
@@ -1565,6 +1565,7 @@ nav#navbar {
 }
 .tab-content .grid {
     padding-bottom: 60px;
+    position: relative;
 }
 #projects .tabs {
     justify-content: center;
@@ -1581,30 +1582,59 @@ nav#navbar {
 }
 
 #projects .slick-arrow {
-    font-family: "icomoon";
     position: absolute;
-    bottom: 212px;
-}
-#projects .prev.slick-arrow {
-    content: "\e900";
-    left: -72px;
-}
-#projects .next.slick-arrow {
-    content: "\e901";
-    right: -42px;
+    top: calc(50% - 16px);
+    transform: translateY(-50%);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 1.5px solid var(--color-line);
+    border-radius: 50%;
+    background: rgba(245, 240, 230, 0.85);
+    color: var(--color-primary);
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    padding: 0;
+    font-size: 0;
+    line-height: 0;
 }
 #projects .slick-arrow:hover,
-#projects .slick-arrow:focus{
-   color: var(--color-secondary);
+#projects .slick-arrow:focus {
+    background: var(--color-primary);
+    color: var(--color-ivory);
+    border-color: var(--color-primary);
+    outline: none;
+}
+#projects .slick-prev {
+    left: -24px;
+}
+#projects .slick-next {
+    right: -24px;
 }
 #projects .slick-arrow i.icon {
-    font-size: 25px;
-    font-weight: bold;
+    font-size: 18px;
     line-height: 1;
 }
 .slick-dots li.slick-active button:before {
     outline: 2px solid #D7D7D7;
     border-radius: 50%;
+}
+
+@media only screen and (max-width: 1500px) {
+  #projects .slick-prev {
+      left: 0;
+  }
+  #projects .slick-next {
+      right: 0;
+  }
+  #projects .slick-arrow {
+      width: 42px;
+      height: 42px;
+      background: rgba(245, 240, 230, 0.92);
+  }
 }
 
 @media only screen and (max-width: 1400px) {
@@ -2387,6 +2417,67 @@ nav#navbar {
     opacity: 100%;
 }
 
+
+/*----- Association Section
+--------------------------------------------------------------*/
+#contact-whatsapp {
+    background-color: var(--color-ivory);
+    padding: 0 0 24px;
+}
+#contact-whatsapp .contact-whatsapp-shell {
+    border: 1px solid var(--color-line);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(245, 240, 230, 0.95), rgba(235, 227, 212, 0.92));
+    padding: 36px;
+}
+#contact-whatsapp .contact-whatsapp-header {
+    max-width: 760px;
+    margin-bottom: 22px;
+}
+#contact-whatsapp .section-title {
+    margin: 0;
+    font-size: clamp(1.4rem, 2.3vw, 2.1rem);
+    line-height: 1.35;
+}
+#contact-whatsapp .contact-whatsapp-form {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+#contact-whatsapp .contact-whatsapp-form input {
+    flex: 1;
+    height: 62px;
+    border: 1px solid rgba(15, 45, 36, 0.22);
+    border-radius: 10px;
+    padding: 0 18px;
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--color-primary);
+}
+#contact-whatsapp .contact-whatsapp-form input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(15, 45, 36, 0.12);
+}
+#contact-whatsapp .contact-whatsapp-form .btn-accent {
+    min-width: 160px;
+    height: 62px;
+    padding: 0 28px;
+}
+
+@media only screen and (max-width: 780px) {
+  #contact-whatsapp .contact-whatsapp-shell {
+      padding: 24px 20px;
+      border-radius: 14px;
+  }
+  #contact-whatsapp .contact-whatsapp-form {
+      flex-direction: column;
+      align-items: stretch;
+  }
+  #contact-whatsapp .contact-whatsapp-form .btn-accent {
+      width: 100%;
+      min-width: 0;
+  }
+}
 
 /*----- Association Section
 --------------------------------------------------------------*/

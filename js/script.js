@@ -251,6 +251,8 @@
           slidesToScroll: 1,
           dots: shouldLoop,
           arrows: shouldLoop,
+          prevArrow: '<button type="button" class="slick-prev slick-arrow" aria-label="Proyecto anterior"><i class="icon icon-arrow-left"></i></button>',
+          nextArrow: '<button type="button" class="slick-next slick-arrow" aria-label="Siguiente proyecto"><i class="icon icon-arrow-right"></i></button>',
           responsive: [
             {
               breakpoint: 1200,
@@ -443,6 +445,34 @@
 
   function closeMenu() {
       setMenuState(false);
+  }
+
+  var whatsappContactSection = document.getElementById('contact-whatsapp');
+  var whatsappContactForm = document.getElementById('whatsapp-contact-form');
+
+  if (whatsappContactSection && whatsappContactForm) {
+    whatsappContactForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      var messageField = whatsappContactForm.querySelector('input[name="message"]');
+      if (!messageField) {
+        return;
+      }
+
+      var rawMessage = (messageField.value || '').trim();
+      if (!rawMessage) {
+        messageField.focus();
+        return;
+      }
+
+      var cleanedNumber = (whatsappContactSection.getAttribute('data-whatsapp-number') || '').replace(/\D/g, '');
+      var whatsappText = encodeURIComponent('Hola! ' + rawMessage);
+      var whatsappUrl = cleanedNumber
+        ? 'https://wa.me/' + cleanedNumber + '?text=' + whatsappText
+        : 'https://wa.me/?text=' + whatsappText;
+
+      window.open(whatsappUrl, '_blank', 'noopener');
+    });
   }
 
   document.addEventListener("click", function (event) {
