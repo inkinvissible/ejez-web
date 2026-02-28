@@ -508,6 +508,59 @@ function blogCard(entry, config) {
 </article>`;
 }
 
+function renderLandingBlogPost(entry, config, isFeatured) {
+  const href = `${config.siteUrl}/${articleRoutePath(entry)}`;
+  const cover = toImageUrl(entry.coverAssetRef || entry.coverUrl, config, {
+    w: 900,
+    h: 620,
+    fit: "crop",
+    auto: "format",
+    q: 82
+  });
+  const primaryTag = Array.isArray(entry.tagTitles) && entry.tagTitles[0]
+    ? entry.tagTitles[0]
+    : getKindLabel(entry.kind);
+  const readTime = Number(entry.readingTime) > 0
+    ? `${Math.round(entry.readingTime)} min lectura`
+    : "";
+  const dateLabel = formatDate(entry.publishedAt, config.defaultLocale);
+  const excerpt = String(entry.excerpt || "").trim();
+  const title = entry.title || "Artículo sin título";
+  const columnClass = `column${isFeatured ? " is-featured" : ""}`;
+
+  const imageHtml = cover
+    ? `<img loading="lazy" decoding="async" src="${escapeHtml(cover)}" alt="${escapeHtml(entry.coverAlt || title)}" class="post-image">`
+    : `<div class="post-image-fallback" aria-hidden="true"></div>`;
+
+  return `
+						<article class="${columnClass}">
+
+							<figure>
+								<a href="${escapeHtml(href)}" class="image-hvr-effect">
+									${imageHtml}
+								</a>
+							</figure>
+
+							<div class="post-item">
+
+								<div class="meta-tag">
+									<div class="meta-date">${escapeHtml(dateLabel)}</div>
+									<a href="${escapeHtml(href)}" class="categories">${escapeHtml(primaryTag)}</a>
+								</div>
+
+								<h3 class="post-title">
+									<a href="${escapeHtml(href)}">${escapeHtml(title)}</a>
+								</h3>
+								${excerpt ? `<p class="post-excerpt">${escapeHtml(excerpt)}</p>` : ""}
+								<div class="post-footer">
+									${readTime ? `<span class="post-reading-time">${escapeHtml(readTime)}</span>` : ""}
+									<a href="${escapeHtml(href)}" class="post-cta">Leer articulo</a>
+								</div>
+
+							</div>
+						</article>`;
+}
+
 function renderBlogPage(entries, config, siteSettings) {
   const title = `Blog ${siteSettings.siteTitle || "EJEZ"} | Desarrollo Web, UX y Automatizaciones`;
   const description = siteSettings.siteDescription || "Blog técnico sobre desarrollo web, UX/UI y automatización de procesos.";
@@ -809,6 +862,20 @@ async function build() {
   await fs.writeFile(path.join(outputDir, "blog.html"), blogHtml, "utf8");
   await ensureDir(path.join(outputDir, "blog"));
   await fs.writeFile(path.join(outputDir, "blog", "index.html"), blogHtml, "utf8");
+
+  // Inject the latest 3 articles into the landing page blog section.
+  const landingIndexPath = path.join(outputDir, "index.html");
+  const landingSource = await fs.readFile(landingIndexPath, "utf8");
+  const latestEntries = entries.slice(0, 3);
+  const landingPostsHtml = latestEntries.length
+    ? latestEntries.map((entry, i) => renderLandingBlogPost(entry, config, i === 0)).join("\n")
+    : `\n\t\t\t\t\t\t<p class="blog-empty-state">Próximamente nuevos artículos.</p>`;
+  const landingInjected = landingSource.replace(
+    "<!-- LANDING:BLOG_POSTS -->",
+    landingPostsHtml
+  );
+  await fs.writeFile(landingIndexPath, landingInjected, "utf8");
+  console.log(`Injected ${latestEntries.length} landing blog posts into index.html`);
 
   const urls = [`${config.siteUrl}/`, `${config.siteUrl}/blog.html`, `${config.siteUrl}/blog/`];
 

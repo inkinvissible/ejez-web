@@ -75,6 +75,8 @@
 								<ul class="menu-list" id="primary-menu">
 									<li class="menu-item active"><a href="#billboard" class="nav-link"
 											data-effect="Home">Home</a></li>
+									<li class="menu-item"><a href="#contact-whatsapp" class="nav-link"
+											data-effect="Contacto">Contacto</a></li>
 									<li class="menu-item"><a href="#about" class="nav-link" data-effect="About">About
 											Us</a></li>
 									<li class="menu-item"><a href="#services" class="nav-link"
@@ -95,11 +97,11 @@
 								</button>
 							</div>
 
-							<a href="#" class="btn-hvr-effect">
-								<span>Let's Talk</span>
+							<a href="https://wa.me/5493512050889?text=Hola%21%20Soy%20(nombre)%20y%20quiero%20hacer%20una%20consulta." class="btn-hvr-effect" target="_blank">
+								<span>Enviamos un mensaje</span>
 								<i class="icon icon-long-arrow-right"></i>
 							</a><!--search-bar-->
-
+							
 						</nav>
 
 					</div>
@@ -123,6 +125,27 @@
 			<button class="scroll-indicator" type="button" aria-label="Scroll to about section">
 				<span>Scroll para ver más</span>
 			</button>
+		</div>
+	</section>
+
+	<section id="contact-whatsapp" data-whatsapp-number="5493512050889">
+		<div class="container">
+			<div class="row">
+				<div class="inner-content">
+					<div class="contact-whatsapp-shell" data-aos="fade-up">
+						<div class="contact-whatsapp-header">
+							<h2 class="section-subtitle liner">Contacto</h2>
+							<h3 class="section-title">Contanos en una línea y te respondemos por WhatsApp</h3>
+						</div>
+						<form class="contact-whatsapp-form" id="whatsapp-contact-form" novalidate>
+							<label for="whatsapp-message" class="visually-hidden">Escribí tu consulta</label>
+							<input id="whatsapp-message" name="message" type="text"
+								placeholder="Ej: Quiero una web para mi emprendimiento" required maxlength="220">
+							<button type="submit" class="btn-accent">Enviar</button>
+						</form>
+					</div>
+				</div>
+			</div>
 		</div>
 	</section>
 
@@ -188,28 +211,31 @@
 									</button>
 								</div>
 								<div class="service-card-details" id="service-details-01">
-								<div class="service-card-body">
-									<p class="service-card-description is-lead">
-										Sitios y aplicaciones web construidos con investigación de usuarios, prototipos
-										testeados y código optimizado.
-									</p>
-									<p class="service-card-description">
-										Trabajamos con HTML, CSS y JavaScript. Para proyectos complejos (dashboards,
-										portales, aplicaciones) usamos React o Next.js. No usamos plantillas: cada
-										interfaz responde a las necesidades específicas de tu negocio.
-									</p>
-									<p class="service-card-result">
-										<strong>Resultado:</strong> Sitios rápidos, seguros y que hacen exactamente lo que
-										tu negocio necesita.
-									</p>
-								</div>
-								<h4 class="service-case-title">Casos de Uso</h4>
-								<ul class="service-case-list" aria-label="Casos de uso para diseño y desarrollo web">
-									<li>Sitios institucionales con identidad visual fuerte</li>
-									<li>Landing pages innovadoras</li>
-									<li>Portales con catálogos extensos y búsquedas avanzadas</li>
-									<li>Plataformas de reservas o cotizaciones</li>
-								</ul>
+									<div class="service-card-body">
+										<p class="service-card-description is-lead">
+											Sitios y aplicaciones web construidos con investigación de usuarios,
+											prototipos
+											testeados y código optimizado.
+										</p>
+										<p class="service-card-description">
+											Trabajamos con HTML, CSS y JavaScript. Para proyectos complejos (dashboards,
+											portales, aplicaciones) usamos React o Next.js. No usamos plantillas: cada
+											interfaz responde a las necesidades específicas de tu negocio.
+										</p>
+										<p class="service-card-result">
+											<strong>Resultado:</strong> Sitios rápidos, seguros y que hacen exactamente
+											lo que
+											tu negocio necesita.
+										</p>
+									</div>
+									<h4 class="service-case-title">Casos de Uso</h4>
+									<ul class="service-case-list"
+										aria-label="Casos de uso para diseño y desarrollo web">
+										<li>Sitios institucionales con identidad visual fuerte</li>
+										<li>Landing pages innovadoras</li>
+										<li>Portales con catálogos extensos y búsquedas avanzadas</li>
+										<li>Plataformas de reservas o cotizaciones</li>
+									</ul>
 								</div>
 							</article>
 
@@ -225,28 +251,30 @@
 									</button>
 								</div>
 								<div class="service-card-details" id="service-details-02">
-								<div class="service-card-body">
-									<p class="service-card-description is-lead">
-										Tu equipo pierde tiempo en tareas repetitivas. Nosotros las automatizamos.
-									</p>
-									<p class="service-card-description">
-										Conectamos tus herramientas (CRM, WhatsApp Business, emails, hojas de cálculo,
-										sistemas internos) con workflows inteligentes usando n8n y Python. No son
-										integraciones superficiales: son sistemas que eliminan trabajo manual.
-									</p>
-									<p class="service-card-result">
-										<strong>Resultado:</strong> Tu equipo se enfoca en lo importante y los procesos
-										corren solos.
-									</p>
-								</div>
-								<h4 class="service-case-title">Casos de Uso</h4>
-								<ul class="service-case-list"
-									aria-label="Casos de uso para automatizaciones empresariales">
-									<li>Seguimiento automatizado de leads desde captura hasta cierre</li>
-									<li>Generación automática de reportes y análisis</li>
-									<li>Automatizaciones críticas para operaciones diarias</li>
-									<li>Asistente digital para WhatsApp empresarial con Inteligencia Artificial</li>
-								</ul>
+									<div class="service-card-body">
+										<p class="service-card-description is-lead">
+											Tu equipo pierde tiempo en tareas repetitivas. Nosotros las automatizamos.
+										</p>
+										<p class="service-card-description">
+											Conectamos tus herramientas (CRM, WhatsApp Business, emails, hojas de
+											cálculo,
+											sistemas internos) con workflows inteligentes usando n8n y Python. No son
+											integraciones superficiales: son sistemas que eliminan trabajo manual.
+										</p>
+										<p class="service-card-result">
+											<strong>Resultado:</strong> Tu equipo se enfoca en lo importante y los
+											procesos
+											corren solos.
+										</p>
+									</div>
+									<h4 class="service-case-title">Casos de Uso</h4>
+									<ul class="service-case-list"
+										aria-label="Casos de uso para automatizaciones empresariales">
+										<li>Seguimiento automatizado de leads desde captura hasta cierre</li>
+										<li>Generación automática de reportes y análisis</li>
+										<li>Automatizaciones críticas para operaciones diarias</li>
+										<li>Asistente digital para WhatsApp empresarial con Inteligencia Artificial</li>
+									</ul>
 								</div>
 							</article>
 
@@ -262,29 +290,32 @@
 									</button>
 								</div>
 								<div class="service-card-details" id="service-details-03">
-								<div class="service-card-body">
-									<p class="service-card-description is-lead">
-										No cobramos "mantenimiento" por hacer nada. Incluye consultoría técnica mensual,
-										monitoreo proactivo, actualizaciones y capacitación para tu equipo.
-									</p>
-									<p class="service-card-description">
-										Todo está self-hosted en infraestructura propia: vos tenés control total de tu
-										tecnología, tu código y tus datos, sin intermediarios ni dependencias de
-										plataformas que no controlás.
-									</p>
-									<p class="service-card-result">
-										<strong>Resultado:</strong> Tranquilidad. Sabés que si algo pasa, nosotros lo
-										resolvemos.
-									</p>
-								</div>
-								<h4 class="service-case-title">Casos de Uso</h4>
-								<ul class="service-case-list"
-									aria-label="Casos de uso para infraestructura y mantenimiento web">
-									<li>Empresas que necesitan alta disponibilidad</li>
-									<li>Proyectos que requieren escalabilidad predecible</li>
-									<li>Equipos sin recursos técnicos internos</li>
-									<li>Clientes que valoran la tranquilidad</li>
-								</ul>
+									<div class="service-card-body">
+										<p class="service-card-description is-lead">
+											No cobramos "mantenimiento" por hacer nada. Incluye consultoría técnica
+											mensual,
+											monitoreo proactivo, actualizaciones y capacitación para tu equipo.
+										</p>
+										<p class="service-card-description">
+											Todo está self-hosted en infraestructura propia: vos tenés control total de
+											tu
+											tecnología, tu código y tus datos, sin intermediarios ni dependencias de
+											plataformas que no controlás.
+										</p>
+										<p class="service-card-result">
+											<strong>Resultado:</strong> Tranquilidad. Sabés que si algo pasa, nosotros
+											lo
+											resolvemos.
+										</p>
+									</div>
+									<h4 class="service-case-title">Casos de Uso</h4>
+									<ul class="service-case-list"
+										aria-label="Casos de uso para infraestructura y mantenimiento web">
+										<li>Empresas que necesitan alta disponibilidad</li>
+										<li>Proyectos que requieren escalabilidad predecible</li>
+										<li>Equipos sin recursos técnicos internos</li>
+										<li>Clientes que valoran la tranquilidad</li>
+									</ul>
 								</div>
 							</article>
 						</div>
@@ -391,7 +422,7 @@
 						<div id="landing" data-tab-content>
 							<div class="grid project-grid">
 
-								
+
 
 								<figure class="project-style hvr-grayscale">
 									<img loading="lazy" decoding="async" src="images/el-limon-bolson-home.png"
@@ -402,9 +433,9 @@
 									</figcaption>
 								</figure>
 
-								
 
-							
+
+
 
 								<figure class="project-style hvr-grayscale">
 									<img loading="lazy" decoding="async" src="images/rancho-ibera.png" alt="project"
@@ -573,15 +604,15 @@
 										<h3><a href="#">Clayphone app uI</a></h3>
 										<div class="category-title">UI/UX Design</div>
 									</figcaption>
-         
-								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/project2.jpg" alt="project"
-										class="project-item">
-									<figcaption>
-										<h3><a href="#">John a.powell card</a></h3>
-										<div class="category-title">Branding</div>
-									</figcaption>
-								</figure>
+
+									<figure class="project-style hvr-grayscale">
+										<img loading="lazy" decoding="async" src="images/project2.jpg" alt="project"
+											class="project-item">
+										<figcaption>
+											<h3><a href="#">John a.powell card</a></h3>
+											<div class="category-title">Branding</div>
+										</figcaption>
+									</figure>
 
 							</div>
 
@@ -709,7 +740,8 @@
 									<span class="tag">Evolución</span>
 								</div>
 								<h3 class="timeline-title">06. Mantenimiento y Mejora Continua</h3>
-								<p class="timeline-summary">Si querés, seguimos trabajando juntos con monitoreo proactivo y actualizaciones.</p>
+								<p class="timeline-summary">Si querés, seguimos trabajando juntos con monitoreo
+									proactivo y actualizaciones.</p>
 								<ul class="timeline-list">
 									<li>Monitoreo de uptime y errores</li>
 									<li>Consultoría técnica mensual</li>
@@ -792,7 +824,8 @@
 					<div class="section-header align-center">
 						<h2 class="section-subtitle">Revista EJE Z</h2>
 						<h3 class="section-title">Ideas accionables de web, automatizacion e infraestructura</h3>
-						<p class="section-lead">Una seleccion editorial para equipos que quieren vender mas, operar con menos friccion y escalar con tecnologia estable.</p>
+						<p class="section-lead">Una seleccion editorial para equipos que quieren vender mas, operar con
+							menos friccion y escalar con tecnologia estable.</p>
 						<div class="btn-wrap">
 							<a href="blog.html" class="btn-outline-accent">Ver todos los articulos</a>
 						</div>
@@ -800,90 +833,7 @@
 
 					<div class="grid" data-aos="fade-up">
 
-						<article class="column is-featured">
-
-							<figure>
-								<a href="blog.html" class="image-hvr-effect">
-									<img loading="lazy" decoding="async" src="images/post-image1.jpg" alt="post"
-										class="post-image">
-								</a>
-							</figure>
-
-							<div class="post-item">
-
-								<div class="meta-tag">
-									<div class="meta-date">06 Feb 2026</div>
-									<a href="blog.html" class="categories">UX Strategy</a>
-								</div>
-
-								<h3 class="post-title">
-									<a href="blog.html">Como reducir la friccion en formularios B2B sin perder calidad de leads</a>
-								</h3>
-								<p class="post-excerpt">Diseno de flujo, orden de campos y microcopy para mejorar conversion con foco en intentos completados y seguimiento comercial.</p>
-								<div class="post-footer">
-									<span class="post-reading-time">8 min lectura</span>
-									<a href="blog.html" class="post-cta">Leer articulo</a>
-								</div>
-
-							</div>
-						</article>
-
-						<article class="column">
-
-							<figure>
-								<a href="blog.html" class="image-hvr-effect">
-									<img loading="lazy" decoding="async" src="images/post-image2.jpg" alt="post"
-										class="post-image">
-								</a>
-							</figure>
-
-							<div class="post-item">
-
-								<div class="meta-tag">
-									<div class="meta-date">29 Jan 2026</div>
-									<a href="blog.html" class="categories">Automation</a>
-								</div>
-
-								<h3 class="post-title">
-									<a href="blog.html">Automatizaciones con n8n: 5 workflows que ahorran horas por semana</a>
-								</h3>
-								<p class="post-excerpt">Desde captura de leads hasta reportes ejecutivos: patrones simples para eliminar tareas repetitivas sin sobrecargar al equipo.</p>
-								<div class="post-footer">
-									<span class="post-reading-time">6 min lectura</span>
-									<a href="blog.html" class="post-cta">Leer articulo</a>
-								</div>
-
-							</div>
-						</article>
-
-						<article class="column">
-
-							<figure>
-								<a href="blog.html" class="image-hvr-effect">
-									<img loading="lazy" decoding="async" src="images/post-image3.jpg" alt="post"
-										class="post-image">
-								</a>
-							</figure>
-
-							<div class="post-item">
-
-								<div class="meta-tag">
-									<div class="meta-date">18 Jan 2026</div>
-									<a href="blog.html" class="categories">Infra</a>
-								</div>
-
-								<h3 class="post-title">
-									<a href="blog.html">Checklist para lanzar sitios mas rapidos y estables en produccion</a>
-								</h3>
-								<p class="post-excerpt">Caching, compresion, observabilidad y seguridad minima para evitar problemas de performance y downtime en etapas de crecimiento.</p>
-								<div class="post-footer">
-									<span class="post-reading-time">7 min lectura</span>
-									<a href="blog.html" class="post-cta">Leer articulo</a>
-								</div>
-
-							</div>
-						</article>
-
+						<!-- LANDING:BLOG_POSTS -->
 
 					</div><!--grid-->
 
@@ -892,43 +842,24 @@
 		</div>
 	</section>
 
-	<section id="contact-whatsapp" data-whatsapp-number="5493510000000">
-		<div class="container">
-			<div class="row">
-				<div class="inner-content">
-					<div class="contact-whatsapp-shell" data-aos="fade-up">
-						<div class="contact-whatsapp-header">
-							<h2 class="section-subtitle liner">Contacto</h2>
-							<h3 class="section-title">Contanos en una línea y te respondemos por WhatsApp</h3>
-						</div>
-						<form class="contact-whatsapp-form" id="whatsapp-contact-form" novalidate>
-							<label for="whatsapp-message" class="visually-hidden">Escribí tu consulta</label>
-							<input id="whatsapp-message" name="message" type="text"
-								placeholder="Ej: Quiero una web para mi emprendimiento" required maxlength="220">
-							<button type="submit" class="btn-accent">Enviar</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
 
-	
+
+
 	<footer id="footer">
 		<div class="container">
 			<div class="row">
 				<div class="inner-content">
-					<div class="footer-menu-list" data-aos="fade-up">
+					<div class="footer-menu-list">
 						<div class="grid">
 
 							<div class="footer-menu">
-								<h3>Explore</h3>
+								<h3>Explora</h3>
 								<ul class="menu-list">
 									<li class="menu-item">
-										<a href="#">Home</a>
+										<a href="index.html">Inicio</a>
 									</li>
 									<li class="menu-item">
-										<a href="#">About Us</a>
+										<a href="#about">Sobre Nosotros</a>
 									</li>
 									<li class="menu-item">
 										<a href="#services">Servicios</a>
@@ -937,36 +868,37 @@
 										<a href="blog.html">Blog</a>
 									</li>
 									<li class="menu-item">
-										<a href="#">Contact Us</a>
+										<a href="#contact">Contacto</a>
 									</li>
 								</ul>
 							</div>
 
 							<div class="footer-menu">
-								<h3>Any queries?</h3>
+								<h3>¿Preguntas?</h3>
 								<ul class="menu-list">
 									<li class="menu-item">
-										<strong>Our Locatio</strong>
-										Tribeca, New York, USA
+										<strong>Ubicación</strong>
+										Córdoba, Argentina
 									</li>
 									<li class="menu-item">
-										<strong>Call Us</strong>
-										(+880)244-35264
+										<strong>Llamanos</strong>
+										(+54) 351 205-0889
 									</li>
 									<li class="menu-item">
-										<strong>Send Us Mail</strong>
-										<a href="#">support@example.com</a>
+										<strong>Envianos un email</strong>
+										<a href="mailto:info@ejez.com.ar">info@ejez.com.ar</a>
 									</li>
 								</ul>
 							</div>
 
 							<div class="footer-item">
-								<h2>Got a project?
-									Let’s talk.</h2>
-								<p>Just feel free to contact if you wanna collaborate with us, or simply have a
-									conversation.</p>
+								<h2>Tenés un proyecto?</h2>
+								<p>Estamos disponibles para reponder a tus ideas e inquietudes. Contactanos!</p>
 								<div class="btn-wrap">
-									<a href="#" class="btn-accent">Contact us</a>
+									<a href="https://wa.me/5493512050889?text=Hola%21%20Soy%20(nombre)%20y%20quiero%20hacer%20una%20consulta."
+										class="btn-accent" target="_blank">
+										Contact us
+									</a>
 								</div>
 							</div>
 
@@ -981,7 +913,7 @@
 		<div class="container">
 			<div class="grid">
 				<div class="copyright">
-					<p>© 2021 <a href="https://templatesjungle.com/">TemplatesJungle.</a> All rights reserved.</p>
+					<p>© 2026 <a href="/">EJEZ</a>. Todos los derechos reservados.</p>
 				</div>
 
 				<div class="social-links">

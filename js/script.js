@@ -466,7 +466,7 @@
       }
 
       var cleanedNumber = (whatsappContactSection.getAttribute('data-whatsapp-number') || '').replace(/\D/g, '');
-      var whatsappText = encodeURIComponent('Hola! ' + rawMessage);
+      var whatsappText = encodeURIComponent(rawMessage);
       var whatsappUrl = cleanedNumber
         ? 'https://wa.me/' + cleanedNumber + '?text=' + whatsappText
         : 'https://wa.me/?text=' + whatsappText;
