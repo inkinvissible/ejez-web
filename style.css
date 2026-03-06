@@ -66,6 +66,10 @@ body {
 }
 body.no-scroll {
     overflow: hidden;
+    padding-right: var(--scrollbar-w, 0px);
+}
+body.no-scroll #header-wrap.is-sticky header#header {
+    padding-right: var(--scrollbar-w, 0px);
 }
 a {
   font-weight: 400;
@@ -139,7 +143,7 @@ img {
 }
 #projects,
 #procedure,
-#testimonial,
+#nuestro-equipo,
 #price-table,
 #latest-blog,
 #association-with,
@@ -775,6 +779,9 @@ nav#navbar {
     box-shadow: 0 8px 18px rgba(15, 45, 36, 0.2);
 }
 #navbar .btn-hvr-effect:hover i.icon {
+    color: inherit;
+}
+#navbar .btn-hvr-effect:hover span {
     color: inherit;
 }
 
@@ -1575,10 +1582,23 @@ nav#navbar {
 #projects .tabs .tab {
     padding-right: 30px;
     color: #8d867d;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.22s ease, color 0.22s ease;
 }
-#projects .tabs .tab.active, 
+#projects .tabs .tab.active,
+#projects .tabs .tab:focus-visible {
+    color: var(--color-ivory);
+    background: var(--color-primary);
+    box-shadow: 0 8px 20px rgba(15,45,36,0.12);
+}
 #projects .tabs .tab:hover {
-    color: var(--color-primary);
+    color: var(--color-ivory);
+    background: var(--color-primary);
+    box-shadow: 0 8px 20px rgba(15,45,36,0.08);
 }
 
 #projects .slick-arrow {
@@ -1630,7 +1650,7 @@ nav#navbar {
   #projects .slick-arrow {
       width: 42px;
       height: 42px;
-      background: rgb(111 169 74 / 92%)
+      background: rgba(245, 240, 230, 0.92);
   }
 }
 
@@ -1665,10 +1685,19 @@ nav#navbar {
   #projects .tabs .tab {
       font-size: 15px;
       color: #fff;
-      background: #f3c522;
+      background: var(--color-primary);
       padding: 10px;
       margin-right: 10px;
+      margin-bottom: 6px;
       border-radius: 10px;
+      border: none;
+  }
+  #projects .tabs .tab.active {
+      background: var(--color-secondary);
+  }
+  #projects .tabs .tab:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
   }
 }
 
@@ -2000,125 +2029,162 @@ nav#navbar {
 }
 
 
-/*----- Testimonial Section
+/*----- Nuestro Equipo Section
 --------------------------------------------------------------*/
-#testimonial {
-    padding: 180px 0;
+#nuestro-equipo {
+    padding: 130px 0;
+    background:
+      radial-gradient(460px 260px at 90% 10%, rgba(74, 47, 34, 0.08), transparent 72%),
+      linear-gradient(180deg, #f7f2e9 0%, #efe7d9 100%);
     overflow: hidden;
 }
-#testimonial .grid {
-    justify-content: center;
-    position: relative;
+#nuestro-equipo .section-header {
+    margin-bottom: 72px;
 }
-#testimonial .section-header {
-    width: 35%;
-    margin-right: 130px;
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
-#testimonial .testimonial-content {
-    width: 45%;
-}
-#testimonial .slick-list {
-    overflow: unset;
-}
-#testimonial .testimonial-item {
+.team-card {
     display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(15, 45, 36, 0.12);
+    border-radius: 28px;
+    padding: 44px 40px;
+    box-shadow: 0 18px 46px rgba(15, 45, 36, 0.09);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.38s ease, border-color 0.38s ease;
 }
-#testimonial .author-detail {
-    background: #fff;
-    padding: 60px 70px;
-    margin: 0 8px;
+.team-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    box-shadow: -2px 1px 29px -9px rgba(0,0,0,0.2);
-    -webkit-box-shadow: -2px 1px 29px -9px rgba(0,0,0,0.2);
-    -moz-box-shadow: -2px 1px 29px -9px rgba(0,0,0,0.2);
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    opacity: 0.75;
 }
-#testimonial .author-detail q {
-    font-size: 18px;
-    line-height: 2;
+.team-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 28px 58px rgba(15, 45, 36, 0.15);
+    border-color: rgba(15, 45, 36, 0.22);
 }
-#testimonial .author-name {
-    font-size: 1.3em;
-    font-weight: 700;
-    padding: 35px 0 15px 0;
-}
-#testimonial .author-thumb {
+.team-card-avatar {
+    flex-shrink: 0;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
     display: flex;
     align-items: center;
-    margin-right: -31px;
-    z-index: 2;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.06em;
+    box-shadow: 0 8px 22px rgba(15, 45, 36, 0.22);
+    margin-top: 4px;
 }
-#testimonial .button-container {
+.team-card-body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.team-card-name {
+    font-size: 1.55rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: var(--color-primary);
+}
+.team-card-role {
+    font-size: 0.76rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    font-weight: 600;
+    margin: 0 0 18px;
+    line-height: 1.55;
+}
+.team-card-bio {
+    font-size: 0.97rem;
+    line-height: 1.78;
+    color: var(--color-muted);
+    margin: 0 0 24px;
+}
+.team-card-tags {
     display: flex;
-    position: absolute;
-    bottom: 0;
-    right: 140px;
+    flex-wrap: wrap;
+    gap: 8px;
 }
-#testimonial button.prev.slick-arrow {
-    border-right: 1px solid #E2E2E2;
-    margin-right: 30px;
-    padding-right: 30px;
+.team-card-tags span {
+    font-size: 0.71rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-primary);
+    border: 1px solid rgba(15, 45, 36, 0.28);
+    background: rgba(15, 45, 36, 0.06);
+    padding: 5px 12px;
+    border-radius: 999px;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
 }
-.button-container button.slick-arrow {
-    font-size: 1.6em;
-    line-height: 0;
-    font-weight: 900;
-    color: #111;
-}
-.button-container button.slick-arrow:hover,
-.button-container button.slick-arrow:focus {
-    color: #ccc;
-}
-
-@media only screen and (max-width: 1200px) {
-  #testimonial .section-header {
-      margin-right: 50px;
-  }
+.team-card:hover .team-card-tags span {
+    background: rgba(15, 45, 36, 0.1);
+    border-color: rgba(15, 45, 36, 0.36);
 }
 
-@media only screen and (max-width: 1040px) {
-  #testimonial .section-header {
-      width: 70%;
-  }
-  #testimonial .testimonial-content {
-      width: 70%;
-  }
-  #testimonial .button-container {
-      right: 160px;
+@media only screen and (max-width: 960px) {
+  .team-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 680px;
   }
 }
 
-@media only screen and (max-width: 900px) {
-  #testimonial .section-header {
-      margin-bottom: 30px;
+@media only screen and (max-width: 620px) {
+  #nuestro-equipo {
+      padding: 92px 0;
+  }
+  #nuestro-equipo .section-header {
+      margin-bottom: 48px;
+  }
+  .team-card {
+      flex-direction: column;
+      gap: 22px;
+      padding: 30px 24px;
+      border-radius: 20px;
+  }
+  .team-card-avatar {
+      width: 72px;
+      height: 72px;
+      font-size: 1.15rem;
+  }
+  .team-card-name {
+      font-size: 1.35rem;
   }
 }
 
-@media only screen and (max-width: 700px) {
-  #testimonial .grid {
-      justify-content: space-between;
-  }
-  #testimonial .section-header {
-      width: 90%;
-  }
-  #testimonial .testimonial-content {
-      width: 90%;
-  }
-  #testimonial .author-detail {
-      padding: 50px 30px;
-  }
-  #testimonial .author-thumb {
-      display: none;
-  }
-  #testimonial .button-container {
-      right: 210px;
-  }
-  #testimonial button.slick-arrow {
-      font-size: 1em;
-  }
-  #testimonial button.prev.slick-arrow {
-      border-right: none;
-      margin-right: 0;
-  }
+/* WhatsApp footer link */
+.footer-whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    transition: color 0.25s ease;
+}
+.footer-whatsapp-link:hover {
+    color: #25D366;
+}
+#footer-bottom .social-links li {
+    padding-left: 0;
 }
 
 

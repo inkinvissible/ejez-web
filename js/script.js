@@ -237,27 +237,27 @@
         var $projectGrid = $(this);
         var totalProjects = $projectGrid.children('.project-style').length;
 
-        // Don't initialize Slick when there are 3 or fewer projects;
-        // the CSS layout already handles them at the correct size.
-        if (totalProjects <= 3) {
+        if (totalProjects < 1) {
           return;
         }
 
         var shouldLoop = totalProjects > 3;
+        var showDots = totalProjects > 1;
+        var showArrows = totalProjects > 1;
 
         $projectGrid.slick({
           infinite: shouldLoop,
-          slidesToShow: 3,
+          slidesToShow: Math.min(3, totalProjects),
           slidesToScroll: 1,
-          dots: shouldLoop,
-          arrows: shouldLoop,
+          dots: showDots,
+          arrows: showArrows,
           prevArrow: '<button type="button" class="slick-prev slick-arrow" aria-label="Proyecto anterior"><i class="icon icon-arrow-left"></i></button>',
           nextArrow: '<button type="button" class="slick-next slick-arrow" aria-label="Siguiente proyecto"><i class="icon icon-arrow-right"></i></button>',
           responsive: [
             {
               breakpoint: 1200,
               settings: {
-                slidesToShow: 2,
+                slidesToShow: Math.min(2, totalProjects),
                 arrows: totalProjects > 2
               }
             },
@@ -271,17 +271,6 @@
             }
           ]
         });
-      });
-    }
-
-    if ($.fn && $.fn.slick && $('.testimonial-slider').length) {
-      $('.testimonial-slider').slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: true,
-        fade: true,
-        prevArrow: $('.prev'),
-        nextArrow: $('.next')
       });
     }
 
@@ -305,7 +294,7 @@
       });
   }
 
-  var sectionToObserve = document.getElementById("projects") || document.getElementById("testimonial");
+  var sectionToObserve = document.getElementById("projects") || document.getElementById("nuestro-equipo");
   if ("IntersectionObserver" in window && sectionToObserve) {
     var pluginObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -340,6 +329,13 @@
   function setMenuState(isOpen) {
     if (!hamburger || !navMenu) {
       return;
+    }
+    // Calculate scrollbar width before toggling overflow
+    if (isOpen) {
+      var scrollbarW = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty('--scrollbar-w', scrollbarW + 'px');
+    } else {
+      document.documentElement.style.setProperty('--scrollbar-w', '0px');
     }
     hamburger.classList.toggle("active", isOpen);
     navMenu.classList.toggle("responsive", isOpen);
@@ -383,7 +379,6 @@
   }
 
   var navSections = [];
-  var sectionVisibility = {};
   navLink.forEach(function (link) {
     var href = link.getAttribute("href");
     if (!href || href.charAt(0) !== "#") {
@@ -401,33 +396,50 @@
 
   if ("IntersectionObserver" in window && navSections.length) {
     var currentActiveNavSectionId = navSections[0].id;
-    var navObserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        sectionVisibility[entry.target.id] = entry.isIntersecting ? entry.intersectionRatio : 0;
-      });
 
-      var activeSectionId = currentActiveNavSectionId;
-      var strongestRatio = 0;
-      navSections.forEach(function (section) {
-        var ratio = sectionVisibility[section.id] || 0;
-        if (ratio > strongestRatio) {
-          strongestRatio = ratio;
-          activeSectionId = section.id;
+    // Use a scroll-position algorithm: pick the section whose top is closest
+    // to the viewport band (top 30%). More reliable than ratio-based.
+    var navScrollTicking = false;
+
+    function updateActiveOnScroll() {
+      navScrollTicking = false;
+      var scrollY = window.scrollY || window.pageYOffset;
+      var viewportH = window.innerHeight;
+      var headerH = header ? Math.round(header.getBoundingClientRect().height) + 20 : 96;
+
+      // If near bottom of page, activate last section
+      if (scrollY + viewportH >= document.documentElement.scrollHeight - 40) {
+        var lastId = navSections[navSections.length - 1].id;
+        if (lastId !== currentActiveNavSectionId) {
+          currentActiveNavSectionId = lastId;
+          setActiveNavSection(lastId);
         }
-      });
-
-      if (activeSectionId) {
-        currentActiveNavSectionId = activeSectionId;
-        setActiveNavSection(activeSectionId);
+        return;
       }
-    }, {
-      threshold: [0.2, 0.4, 0.55, 0.75],
-      rootMargin: "-18% 0px -52% 0px"
-    });
 
-    navSections.forEach(function (section) {
-      navObserver.observe(section);
-    });
+      // Standard scroll-spy: pick the last section whose top has scrolled past the trigger line
+      var bestId = navSections[0].id;
+      for (var i = 0; i < navSections.length; i++) {
+        var rect = navSections[i].getBoundingClientRect();
+        if (rect.top <= headerH + 60) {
+          bestId = navSections[i].id;
+        }
+      }
+
+      if (bestId !== currentActiveNavSectionId) {
+        currentActiveNavSectionId = bestId;
+        setActiveNavSection(bestId);
+      }
+    }
+
+    window.addEventListener("scroll", function () {
+      if (!navScrollTicking) {
+        window.requestAnimationFrame(updateActiveOnScroll);
+        navScrollTicking = true;
+      }
+    }, { passive: true });
+
+    updateActiveOnScroll();
   }
 
   navLink.forEach(function (link) {
