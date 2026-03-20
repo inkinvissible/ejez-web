@@ -824,8 +824,14 @@ async function copyDir(source, destination) {
   const entries = await fs.readdir(source, { withFileTypes: true });
   await ensureDir(destination);
 
+  const exclusions = new Set([
+    ".git", ".site", "scripts", ".github", "node_modules",
+    "article.html", "blog.html", "blog-article.js", "blog-list.js",
+    "sanity-client.js", "sanity-config.js"
+  ]);
+
   for (const entry of entries) {
-    if (entry.name === ".git" || entry.name === ".site" || entry.name === "scripts" || entry.name === ".github" || entry.name === "node_modules") {
+    if (exclusions.has(entry.name)) {
       continue;
     }
     const sourcePath = path.join(source, entry.name);
