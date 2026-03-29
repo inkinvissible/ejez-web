@@ -26,20 +26,10 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Resolve Site URL
-        run: |
-          OWNER="${GITHUB_REPOSITORY%/*}"
-          REPO="${GITHUB_REPOSITORY#*/}"
-          if [ "$REPO" = "${OWNER}.github.io" ]; then
-            echo "SITE_URL=https://${OWNER}.github.io" >> "$GITHUB_ENV"
-          else
-            echo "SITE_URL=https://${OWNER}.github.io/${REPO}" >> "$GITHUB_ENV"
-          fi
-
       - name: Build Static Site
         run: node scripts/build-static-blog.mjs
         env:
-          SITE_URL: ${{ env.SITE_URL }}
+          SITE_URL: "https://ejez.com.ar"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
