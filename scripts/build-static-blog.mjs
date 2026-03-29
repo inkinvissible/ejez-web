@@ -201,7 +201,7 @@ function renderTableBlock(block) {
 
   if (!normalizedRows.length) return "";
 
-  const useHeader = normalizedRows.length > 1;
+  const useHeader = block.hasHeaderRow !== false && normalizedRows.length > 1;
   let html = "<figure class=\"article-table-wrap\"><div class=\"article-table-scroll\"><table class=\"article-table\">";
 
   if (useHeader) {
@@ -333,7 +333,7 @@ function renderPortableText(blocks, config, options = {}) {
       continue;
     }
 
-    if (block._type === "table") {
+    if (block._type === "table" || block._type === "tableBlock") {
       html += renderTableBlock(block);
       continue;
     }
@@ -785,6 +785,12 @@ async function getEntries(config) {
       "      \"assetUrl\": asset->url,",
       "      \"alt\": coalesce(alt, \"Imagen del artículo\"),",
       "      \"caption\": caption",
+      "    },",
+      "    _type == \"tableBlock\" => {",
+      "      \"_type\": \"tableBlock\",",
+      "      caption,",
+      "      hasHeaderRow,",
+      "      \"rows\": rows[]{cells}",
       "    }",
       "  }",
       "}"
