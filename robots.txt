@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ejez.com.ar/sitemap.xml

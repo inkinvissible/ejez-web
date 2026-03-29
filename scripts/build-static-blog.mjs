@@ -883,7 +883,15 @@ async function build() {
   await fs.writeFile(landingIndexPath, landingInjected, "utf8");
   console.log(`Injected ${latestEntries.length} landing blog posts into index.html`);
 
-  const urls = [`${config.siteUrl}/`, `${config.siteUrl}/blog.html`, `${config.siteUrl}/blog/`];
+  const urls = [
+    `${config.siteUrl}/`,
+    `${config.siteUrl}/blog.html`,
+    `${config.siteUrl}/blog/`,
+    `${config.siteUrl}/servicios/desarrollo-web-cordoba.html`,
+    `${config.siteUrl}/servicios/automatizaciones-n8n.html`,
+    `${config.siteUrl}/servicios/infraestructura-self-hosted.html`,
+    `${config.siteUrl}/servicios/inteligencia-artificial.html`
+  ];
 
   for (const entry of entries) {
     const fileName = articleFileName(entry);

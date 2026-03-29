@@ -16,20 +16,20 @@
 		content="EJEZ diseña y desarrolla sitios web, sistemas y automatizaciones a medida para empresas en Córdoba. Investigación UX, código optimizado y soporte técnico continuo.">
 	<meta name="robots" content="index, follow">
 	<meta name="theme-color" content="#F5F0E6">
-	<link rel="canonical" href="/">
+	<link rel="canonical" href="https://ejez.com.ar/">
 	<meta property="og:type" content="website">
 	<meta property="og:site_name" content="EJEZ">
-	<meta property="og:url" content="/">
+	<meta property="og:url" content="https://ejez.com.ar/">
 	<meta property="og:locale" content="es_AR">
 	<meta property="og:title" content="EJEZ | Desarrollo Web y Automatizaciones para Empresas en Córdoba">
 	<meta property="og:description"
 		content="Sitios web, sistemas y automatizaciones a medida para empresas en Córdoba. Investigación UX, desarrollo técnico y soporte continuo.">
-	<meta property="og:image" content="images/logo.webp">
+	<meta property="og:image" content="https://ejez.com.ar/images/logo.webp">
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="EJEZ | Desarrollo Web y Automatizaciones para Empresas en Córdoba">
 	<meta name="twitter:description"
 		content="Desarrollo web y automatizaciones para empresas en Córdoba, con enfoque en UX, performance y resultados de negocio.">
-	<meta name="twitter:image" content="images/logo.webp">
+	<meta name="twitter:image" content="https://ejez.com.ar/images/logo.webp">
 	<meta name="twitter:image:alt" content="Logo de EJEZ y vista previa de marca">
 
 	<link rel="stylesheet" type="text/css" href="css/normalize.css">
@@ -44,18 +44,86 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<link rel="preload" href="images/logo-ejez.svg" as="image" type="image/svg+xml">
 
+	<!-- Google Analytics (GA4) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-6NYWYLYXJG"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-6NYWYLYXJG');
+	</script>
+
 	<script type="application/ld+json">
 		{
 		  "@context": "https://schema.org",
-		  "@type": "Organization",
+		  "@type": "ProfessionalService",
 		  "name": "EJEZ",
-		  "url": "/",
-		  "logo": "images/logo-ejez.svg",
-		  "description": "Agencia especializada en desarrollo web y automatizaciones a medida para empresas.",
+		  "url": "https://ejez.com.ar",
+		  "logo": "https://ejez.com.ar/images/logo-ejez.svg",
+		  "image": "https://ejez.com.ar/images/logo.webp",
+		  "description": "Agencia especializada en desarrollo web, automatizaciones con n8n y Python, e infraestructura self-hosted para empresas en Córdoba, Argentina.",
 		  "inLanguage": "es-AR",
-		  "areaServed": "Córdoba, Argentina"
+		  "telephone": "+5493512050889",
+		  "email": "info@ejez.com.ar",
+		  "address": {
+			"@type": "PostalAddress",
+			"addressLocality": "Córdoba",
+			"addressRegion": "Córdoba",
+			"addressCountry": "AR"
+		  },
+		  "areaServed": {
+			"@type": "City",
+			"name": "Córdoba",
+			"containedInPlace": {
+			  "@type": "Country",
+			  "name": "Argentina"
+			}
+		  },
+		  "founder": [
+			{"@type": "Person", "name": "Agustín Martín", "jobTitle": "CEO & Co-fundador"},
+			{"@type": "Person", "name": "Candelaria Piña", "jobTitle": "Co-fundadora, UX/UI Design"}
+		  ],
+		  "hasOfferCatalog": {
+			"@type": "OfferCatalog",
+			"name": "Servicios EJEZ",
+			"itemListElement": [
+			  {
+				"@type": "Offer",
+				"itemOffered": {
+				  "@type": "Service",
+				  "name": "Diseño UX/UI y Desarrollo Web a Medida",
+				  "description": "Sitios y aplicaciones web construidos con investigación de usuarios, prototipos testeados y código optimizado."
+				}
+			  },
+			  {
+				"@type": "Offer",
+				"itemOffered": {
+				  "@type": "Service",
+				  "name": "Automatizaciones con n8n y Python",
+				  "description": "Workflows inteligentes que conectan CRM, WhatsApp Business, emails y sistemas internos para eliminar trabajo manual."
+				}
+			  },
+			  {
+				"@type": "Offer",
+				"itemOffered": {
+				  "@type": "Service",
+				  "name": "Infraestructura Self-Hosted y Mantenimiento Web",
+				  "description": "Hosting en infraestructura propia con monitoreo proactivo, actualizaciones de seguridad y consultoría técnica mensual."
+				}
+			  },
+			  {
+				"@type": "Offer",
+				"itemOffered": {
+				  "@type": "Service",
+				  "name": "Inteligencia Artificial, Deep Learning y Modelos a Medida",
+				  "description": "Desarrollo e implementación de modelos de IA y Deep Learning a medida, desplegados en infraestructura propia del cliente para máximo control y privacidad."
+				}
+			  }
+			]
+		  },
+		  "sameAs": []
 		}
-		</script>
+	</script>
 
 </head>
 
@@ -118,8 +186,8 @@
 				<p>Investigación de usuarios, desarrollo a medida de webs, sistemas y automatizaciones técnicas con n8n
 					para empresas y emprendedores que buscan resultados, no promesas.</p>
 				<div class="btn-wrap hero-cta-group">
-					<a href="#" class="btn-accent">Agendar consultoría</a>
-					<a href="#" class="btn-outline-accent">Ver casos de éxito</a>
+					<a href="https://wa.me/5493512050889?text=Hola!%20Quiero%20agendar%20una%20consultor%C3%ADa%20t%C3%A9cnica%20inicial." class="btn-accent" target="_blank" rel="noopener">Agendar consultoría</a>
+					<a href="#projects" class="btn-outline-accent">Ver casos de éxito</a>
 				</div>
 			</div><!--banner-content-->
 			<button class="scroll-indicator" type="button" aria-label="Scroll to about section">
@@ -203,7 +271,7 @@
 								<div class="service-watermark" aria-hidden="true">01</div>
 								<div class="service-card-top">
 									<p class="service-card-number">Servicio 01</p>
-									<h3 class="service-card-title">Diseño UX/UI y Desarrollo Web a Medida</h3>
+									<h3 class="service-card-title"><a href="servicios/desarrollo-web-cordoba.html">Diseño UX/UI y Desarrollo Web a Medida</a></h3>
 									<button class="service-toggle-btn" type="button" aria-expanded="false"
 										aria-controls="service-details-01">
 										<span class="service-toggle-label">Ver detalles</span>
@@ -243,7 +311,7 @@
 								<div class="service-watermark" aria-hidden="true">02</div>
 								<div class="service-card-top">
 									<p class="service-card-number">Servicio 02</p>
-									<h3 class="service-card-title">Automatizaciones con n8n y Python</h3>
+									<h3 class="service-card-title"><a href="servicios/automatizaciones-n8n.html">Automatizaciones con n8n y Python</a></h3>
 									<button class="service-toggle-btn" type="button" aria-expanded="false"
 										aria-controls="service-details-02">
 										<span class="service-toggle-label">Ver detalles</span>
@@ -282,7 +350,7 @@
 								<div class="service-watermark" aria-hidden="true">03</div>
 								<div class="service-card-top">
 									<p class="service-card-number">Servicio 03</p>
-									<h3 class="service-card-title">Infraestructura Self-Hosted y Mantenimiento Web</h3>
+									<h3 class="service-card-title"><a href="servicios/infraestructura-self-hosted.html">Infraestructura Self-Hosted y Mantenimiento Web</a></h3>
 									<button class="service-toggle-btn" type="button" aria-expanded="false"
 										aria-controls="service-details-03">
 										<span class="service-toggle-label">Ver detalles</span>
@@ -315,6 +383,41 @@
 										<li>Proyectos que requieren escalabilidad predecible</li>
 										<li>Equipos sin recursos técnicos internos</li>
 										<li>Clientes que valoran la tranquilidad</li>
+									</ul>
+								</div>
+							</article>
+
+							<article class="service-card" data-service-number="04">
+								<div class="service-watermark" aria-hidden="true">04</div>
+								<div class="service-card-top">
+									<p class="service-card-number">Servicio 04</p>
+									<h3 class="service-card-title"><a href="servicios/inteligencia-artificial.html">Inteligencia Artificial, Deep Learning y Modelos a Medida</a></h3>
+									<button class="service-toggle-btn" type="button" aria-expanded="false"
+										aria-controls="service-details-04">
+										<span class="service-toggle-label">Ver detalles</span>
+										<span class="service-toggle-icon" aria-hidden="true"></span>
+									</button>
+								</div>
+								<div class="service-card-details" id="service-details-04">
+									<div class="service-card-body">
+										<p class="service-card-description is-lead">
+											Desarrollamos e implementamos modelos de inteligencia artificial y deep learning a medida para resolver problemas reales de tu negocio.
+										</p>
+										<p class="service-card-description">
+											Desde modelos de clasificación y predicción hasta visión por computadora y procesamiento de lenguaje natural. Todo desplegado en tu propia infraestructura: tus datos nunca salen de tu servidor. No usamos APIs de terceros como caja negra: construimos y entrenamos modelos que vos controlás.
+										</p>
+										<p class="service-card-result">
+											<strong>Resultado:</strong> IA que resuelve problemas reales de tu negocio, con control total y sin dependencia de proveedores externos.
+										</p>
+									</div>
+									<h4 class="service-case-title">Casos de Uso</h4>
+									<ul class="service-case-list"
+										aria-label="Casos de uso para inteligencia artificial y deep learning">
+										<li>Chatbots y asistentes inteligentes con LLMs propios</li>
+										<li>Modelos de predicción de demanda y ventas</li>
+										<li>Clasificación automática de documentos e imágenes</li>
+										<li>Sistemas de recomendación personalizados</li>
+										<li>Visión por computadora para control de calidad</li>
 									</ul>
 								</div>
 							</article>
@@ -354,7 +457,7 @@
 							<div class="grid project-grid">
 
 								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/ramayon-precios.png" alt="project"
+									<img loading="lazy" decoding="async" src="images/ramayon-precios.png" alt="Sistema de precios dinámicos para Ramayón House desarrollado por Eje Z"
 										class="project-item">
 									<figcaption>
 										<h3><a href="#">Ramayón House</a></h3>
@@ -363,7 +466,7 @@
 								</figure>
 
 								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/altos-apart-home.png" alt="project"
+									<img loading="lazy" decoding="async" src="images/altos-apart-home.png" alt="Sitio web multi-page para Altos Apart Carlos Paz desarrollado por Eje Z"
 										class="project-item">
 									<figcaption>
 										<h3><a href="#">Altos Apart Carlos Paz</a></h3>
@@ -373,7 +476,7 @@
 
 								<figure class="project-style hvr-grayscale">
 									<img loading="lazy" decoding="async" src="images/posada-cerros-home.png"
-										alt="project" class="project-item">
+										alt="Sitio web para Posada de los Cerros - alojamiento desarrollado por Eje Z" class="project-item">
 									<figcaption>
 										<h3><a href="#">Posada de los Cerros</a></h3>
 										<div class="category-title">Alojamientos - Multi Page site</div>
@@ -382,7 +485,7 @@
 
 								<figure class="project-style hvr-grayscale">
 									<img loading="lazy" decoding="async" src="images/el-limon-bolson-home.png"
-										alt="project" class="project-item">
+										alt="Landing page para El Limón del Bolsón - alojamiento desarrollado por Eje Z" class="project-item">
 									<figcaption>
 										<h3><a href="#">El Limón del Bolsón</a></h3>
 										<div class="category-title">Alojamientos - Landing page</div>
@@ -390,7 +493,7 @@
 								</figure>
 
 								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/ecorise-home.png" alt="project"
+									<img loading="lazy" decoding="async" src="images/ecorise-home.png" alt="Sitio web multi-page para EcoRise energía renovable desarrollado por Eje Z"
 										class="project-item">
 									<figcaption>
 										<h3><a href="#">EcoRise</a></h3>
@@ -400,7 +503,7 @@
 
 								<figure class="project-style hvr-grayscale">
 									<img loading="lazy" decoding="async" src="images/departamentos-ventana-home.png"
-										alt="project" class="project-item">
+										alt="Sitio web para Departamentos Ventana - alojamiento desarrollado por Eje Z" class="project-item">
 									<figcaption>
 										<h3><a href="#">Departamentos Ventana</a></h3>
 										<div class="category-title">Alojamientos - Multi Page site</div>
@@ -408,7 +511,7 @@
 								</figure>
 
 								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/rancho-ibera.png" alt="project"
+									<img loading="lazy" decoding="async" src="images/rancho-ibera.png" alt="Landing page para Posada Rancho Iberá desarrollada por Eje Z"
 										class="project-item">
 									<figcaption>
 										<h3><a href="#">Posada Rancho iberá</a></h3>
@@ -426,7 +529,7 @@
 
 								<figure class="project-style hvr-grayscale">
 									<img loading="lazy" decoding="async" src="images/el-limon-bolson-home.png"
-										alt="project" class="project-item">
+										alt="Landing page para El Limón del Bolsón - alojamiento en El Bolsón" class="project-item">
 									<figcaption>
 										<h3><a href="#">El Limón del Bolsón</a></h3>
 										<div class="category-title">Alojamientos - Landing page</div>
@@ -438,7 +541,7 @@
 
 
 								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/rancho-ibera.png" alt="project"
+									<img loading="lazy" decoding="async" src="images/rancho-ibera.png" alt="Landing page para Posada Rancho Iberá en Corrientes"
 										class="project-item">
 									<figcaption>
 										<h3><a href="#">Posada Rancho iberá</a></h3>
@@ -452,7 +555,7 @@
 							<div class="grid project-grid">
 
 								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/ramayon-home.png" alt="project"
+									<img loading="lazy" decoding="async" src="images/ramayon-home.png" alt="Página principal de Ramayón House - sitio multi-page por Eje Z"
 										class="project-item">
 									<figcaption>
 										<h3><a href="#">Ramayón House</a></h3>
@@ -461,7 +564,7 @@
 								</figure>
 
 								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/altos-apart-home.png" alt="project"
+									<img loading="lazy" decoding="async" src="images/altos-apart-home.png" alt="Página principal de Altos Apart Carlos Paz por Eje Z"
 										class="project-item">
 									<figcaption>
 										<h3><a href="#">Altos Apart Carlos Paz</a></h3>
@@ -471,7 +574,7 @@
 
 								<figure class="project-style hvr-grayscale">
 									<img loading="lazy" decoding="async" src="images/posada-cerros-home.png"
-										alt="project" class="project-item">
+										alt="Página principal de Posada de los Cerros por Eje Z" class="project-item">
 									<figcaption>
 										<h3><a href="#">Posada de los Cerros</a></h3>
 										<div class="category-title">Alojamientos - Multi Page site</div>
@@ -479,7 +582,7 @@
 								</figure>
 
 								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/ecorise-home.png" alt="project"
+									<img loading="lazy" decoding="async" src="images/ecorise-home.png" alt="Página principal de EcoRise energía renovable por Eje Z"
 										class="project-item">
 									<figcaption>
 										<h3><a href="#">EcoRise</a></h3>
@@ -489,7 +592,7 @@
 
 								<figure class="project-style hvr-grayscale">
 									<img loading="lazy" decoding="async" src="images/departamentos-ventana-home.png"
-										alt="project" class="project-item">
+										alt="Página principal de Departamentos Ventana por Eje Z" class="project-item">
 									<figcaption>
 										<h3><a href="#">Departamentos Ventana</a></h3>
 										<div class="category-title">Alojamientos - Multi Page site</div>
@@ -503,7 +606,7 @@
 							<div class="grid project-grid">
 
 								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/ramayon-precios.png" alt="project"
+									<img loading="lazy" decoding="async" src="images/ramayon-precios.png" alt="Sistema de precios dinámicos y cuadro tarifario para Ramayón House"
 										class="project-item">
 									<figcaption>
 										<h3><a href="#">Ramayón House</a></h3>
@@ -513,7 +616,7 @@
 
 								<figure class="project-style hvr-grayscale">
 									<img loading="lazy" decoding="async" src="images/el-limon-bolson-home.png"
-										alt="project" class="project-item">
+										alt="Búsqueda de tarifas por fecha para El Limón del Bolsón" class="project-item">
 									<figcaption>
 										<h3><a href="#">El Limón del Bolsón</a></h3>
 										<div class="category-title">Búsqueda de tarifas por fecha</div>
@@ -521,7 +624,7 @@
 								</figure>
 
 								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/ecorise-home.png" alt="project"
+									<img loading="lazy" decoding="async" src="images/ecorise-home.png" alt="Blog de noticias dinámico para EcoRise por Eje Z"
 										class="project-item">
 									<figcaption>
 										<h3><a href="#">EcoRise</a></h3>
@@ -534,89 +637,7 @@
 							</div>
 						</div>
 
-						<div id="design" data-tab-content>
-							<div class="grid project-grid">
 
-								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/project3.jpg" alt="project"
-										class="project-item">
-									<figcaption>
-										<h3><a href="#">Sajna fashion wears</a></h3>
-										<div class="category-title">UI/UX Design, Ecommerce</div>
-									</figcaption>
-								</figure>
-
-								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/project1.jpg" alt="project"
-										class="project-item">
-									<figcaption>
-										<h3><a href="#">John a.powell card</a></h3>
-										<div class="category-title">Branding</div>
-									</figcaption>
-								</figure>
-
-								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/project2.jpg" alt="project"
-										class="project-item">
-									<figcaption>
-										<h3><a href="#">Clayphone app uI</a></h3>
-										<div class="category-title">UI/UX Design</div>
-									</figcaption>
-								</figure>
-
-								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/project3.jpg" alt="project"
-										class="project-item">
-									<figcaption>
-										<h3><a href="#">John a.powell card</a></h3>
-										<div class="category-title">Branding</div>
-									</figcaption>
-								</figure>
-
-							</div>
-						</div>
-
-						<div id="animation" data-tab-content>
-							<div class="grid project-grid">
-
-								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/project1.jpg" alt="project"
-										class="project-item">
-									<figcaption>
-										<h3><a href="#">Sajna fashion wears</a></h3>
-										<div class="category-title">UI/UX Design, Ecommerce</div>
-									</figcaption>
-								</figure>
-
-								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/project2.jpg" alt="project"
-										class="project-item">
-									<figcaption>
-										<h3><a href="#">John a.powell card</a></h3>
-										<div class="category-title">Branding</div>
-									</figcaption>
-								</figure>
-
-								<figure class="project-style hvr-grayscale">
-									<img loading="lazy" decoding="async" src="images/project3.jpg" alt="project"
-										class="project-item">
-									<figcaption>
-										<h3><a href="#">Clayphone app uI</a></h3>
-										<div class="category-title">UI/UX Design</div>
-									</figcaption>
-
-									<figure class="project-style hvr-grayscale">
-										<img loading="lazy" decoding="async" src="images/project2.jpg" alt="project"
-											class="project-item">
-										<figcaption>
-											<h3><a href="#">John a.powell card</a></h3>
-											<div class="category-title">Branding</div>
-										</figcaption>
-									</figure>
-
-							</div>
-
-						</div>
 
 					</div>
 
@@ -804,6 +825,116 @@
 			</div>
 		</div>
 	</section>
+
+	<section id="faq" aria-labelledby="faq-title">
+		<div class="container">
+			<div class="row">
+				<div class="inner-content">
+
+					<div class="section-header align-center" data-aos="fade-up">
+						<h2 class="section-subtitle liner">Preguntas Frecuentes</h2>
+						<h3 class="section-title" id="faq-title">Todo lo que necesitás saber antes de empezar</h3>
+					</div>
+
+					<div class="faq-list" data-aos="fade-up">
+
+						<details class="faq-item">
+							<summary class="faq-question">¿Cuánto cuesta un sitio web con EJE Z?</summary>
+							<div class="faq-answer">
+								<p>Cada proyecto es diferente y el presupuesto depende de la complejidad, la cantidad de páginas, las integraciones necesarias y si incluye automatizaciones. Ofrecemos una consultoría técnica inicial donde evaluamos tu proyecto y te orientamos sobre costos estimados. Para proyectos que requieren una investigación exhaustiva, el diagnóstico puede tener un costo acorde a la complejidad.</p>
+							</div>
+						</details>
+
+						<details class="faq-item">
+							<summary class="faq-question">¿En cuánto tiempo entregan un proyecto?</summary>
+							<div class="faq-answer">
+								<p>Un sitio web institucional típico tarda entre 3 y 5 semanas. Proyectos más complejos con automatizaciones, sistemas a medida o integraciones pueden tomar entre 6 y 12 semanas. Siempre definimos un cronograma en la etapa de planificación y mantenemos comunicación semanal sobre el avance.</p>
+							</div>
+						</details>
+
+						<details class="faq-item">
+							<summary class="faq-question">¿Qué tecnologías usan?</summary>
+							<div class="faq-answer">
+								<p>Trabajamos con HTML, CSS, JavaScript, React y Next.js para el desarrollo web. Para automatizaciones usamos n8n y Python. Toda la infraestructura es self-hosted en servidores propios del cliente, lo que garantiza control total sobre el código, los datos y la privacidad. No usamos plantillas ni WordPress: cada proyecto es desarrollado a medida.</p>
+							</div>
+						</details>
+
+						<details class="faq-item">
+							<summary class="faq-question">¿Ofrecen mantenimiento después del lanzamiento?</summary>
+							<div class="faq-answer">
+								<p>Sí. Ofrecemos planes de mantenimiento que incluyen monitoreo proactivo, actualizaciones de seguridad, consultoría técnica mensual y capacitación para tu equipo. A diferencia de otras agencias, nuestro mantenimiento incluye trabajo real: no cobramos por "no hacer nada".</p>
+							</div>
+						</details>
+
+						<details class="faq-item">
+							<summary class="faq-question">¿Qué pasa si no estoy conforme con el diseño?</summary>
+							<div class="faq-answer">
+								<p>Antes de escribir una línea de código, diseñamos prototipos interactivos que podés probar y aprobar. Hacemos testing con usuarios reales y ajustamos hasta que estés 100% conforme. Este proceso de validación previo elimina sorpresas y asegura que el resultado final sea exactamente lo que necesitás.</p>
+							</div>
+						</details>
+
+						<details class="faq-item">
+							<summary class="faq-question">¿Trabajan con empresas fuera de Córdoba?</summary>
+							<div class="faq-answer">
+								<p>Sí. Aunque estamos basados en Córdoba, Argentina, trabajamos con clientes de todo el país y la región. Toda nuestra comunicación y entregas se gestionan de forma remota con herramientas profesionales. La ubicación no es una limitación.</p>
+							</div>
+						</details>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script type="application/ld+json">
+		{
+		  "@context": "https://schema.org",
+		  "@type": "FAQPage",
+		  "mainEntity": [
+			{
+			  "@type": "Question",
+			  "name": "¿Cuánto cuesta un sitio web con EJE Z?",
+			  "acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Cada proyecto es diferente y el presupuesto depende de la complejidad, la cantidad de páginas, las integraciones necesarias y si incluye automatizaciones. Ofrecemos una consultoría técnica inicial donde evaluamos tu proyecto y te orientamos sobre costos. Para proyectos complejos, el diagnóstico puede tener un costo acorde."
+			  }
+			},
+			{
+			  "@type": "Question",
+			  "name": "¿En cuánto tiempo entregan un proyecto?",
+			  "acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Un sitio web institucional típico tarda entre 3 y 5 semanas. Proyectos más complejos con automatizaciones pueden tomar entre 6 y 12 semanas."
+			  }
+			},
+			{
+			  "@type": "Question",
+			  "name": "¿Qué tecnologías usan?",
+			  "acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Trabajamos con HTML, CSS, JavaScript, React y Next.js para desarrollo web. Para automatizaciones usamos n8n y Python. Toda la infraestructura es self-hosted en servidores propios del cliente."
+			  }
+			},
+			{
+			  "@type": "Question",
+			  "name": "¿Ofrecen mantenimiento después del lanzamiento?",
+			  "acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Sí. Ofrecemos planes de mantenimiento que incluyen monitoreo proactivo, actualizaciones de seguridad, consultoría técnica mensual y capacitación para tu equipo."
+			  }
+			},
+			{
+			  "@type": "Question",
+			  "name": "¿Trabajan con empresas fuera de Córdoba?",
+			  "acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Sí. Aunque estamos basados en Córdoba, Argentina, trabajamos con clientes de todo el país y la región. Toda nuestra comunicación y entregas se gestionan de forma remota."
+			  }
+			}
+		  ]
+		}
+	</script>
 
 	<section id="latest-blog">
 		<div class="container">
