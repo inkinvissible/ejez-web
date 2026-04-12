@@ -142,6 +142,7 @@ img {
   vertical-align: middle;
 }
 #projects,
+#architecture-sprint,
 #procedure,
 #nuestro-equipo,
 #faq,
@@ -1522,7 +1523,97 @@ nav#navbar {
   }
 }
 
-/*----- Services Section
+/*----- Architecture Sprint Section
+--------------------------------------------------------------*/
+#architecture-sprint {
+    padding: 110px 0;
+    background:
+      radial-gradient(460px 260px at 12% 12%, rgba(15, 70, 56, 0.08), transparent 72%),
+      linear-gradient(180deg, #f1e9dc 0%, #f8f3ea 100%);
+}
+#architecture-sprint .architecture-sprint-shell {
+    width: min(980px, 100%);
+    margin: 0 auto;
+}
+#architecture-sprint .section-header {
+    margin-bottom: 44px;
+}
+#architecture-sprint .section-kicker {
+    display: inline-block;
+}
+#architecture-sprint .section-lead {
+    max-width: 860px;
+}
+#architecture-sprint .architecture-sprint-content {
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(15, 45, 36, 0.14);
+    border-radius: 24px;
+    box-shadow: 0 20px 44px rgba(15, 45, 36, 0.1);
+    padding: 38px 36px;
+}
+#architecture-sprint .architecture-sprint-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 18px;
+}
+#architecture-sprint .architecture-sprint-list li {
+    border: 1px solid rgba(15, 45, 36, 0.12);
+    border-radius: 14px;
+    background: rgba(245, 240, 230, 0.75);
+    padding: 16px 16px 16px 44px;
+    color: var(--color-muted);
+    line-height: 1.62;
+    position: relative;
+}
+#architecture-sprint .architecture-sprint-list li::before {
+    content: "";
+    position: absolute;
+    left: 18px;
+    top: 24px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+}
+#architecture-sprint .architecture-sprint-note {
+    margin: 24px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid rgba(15, 45, 36, 0.14);
+    color: var(--color-primary);
+    font-weight: 500;
+}
+#architecture-sprint .btn-wrap {
+    margin-top: 24px;
+}
+
+@media only screen and (max-width: 900px) {
+  #architecture-sprint .architecture-sprint-list {
+      grid-template-columns: 1fr;
+  }
+}
+
+@media only screen and (max-width: 620px) {
+  #architecture-sprint {
+      padding: 86px 0;
+  }
+  #architecture-sprint .architecture-sprint-content {
+      padding: 26px 20px;
+      border-radius: 16px;
+  }
+  #architecture-sprint .architecture-sprint-list li {
+      padding: 14px 14px 14px 38px;
+      border-radius: 12px;
+  }
+  #architecture-sprint .architecture-sprint-list li::before {
+      left: 14px;
+      top: 20px;
+  }
+}
+
+/*----- Projects Section
 --------------------------------------------------------------*/
 #projects {
     background-color: var(--color-ivory);
