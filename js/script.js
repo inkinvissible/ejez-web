@@ -597,4 +597,57 @@
     updateTimelineProgress();
   }
 
+  // WhatsApp Floating Button Logic
+  var whatsappFloat = document.getElementById("whatsapp-float");
+  if (whatsappFloat) {
+    var whatsappBtn = whatsappFloat.querySelector(".whatsapp-btn");
+    var whatsappTooltip = whatsappFloat.querySelector(".whatsapp-tooltip");
+    var phoneNumber = whatsappFloat.getAttribute("data-phone") || "5493512050889";
+    var articleTitle = whatsappFloat.getAttribute("data-article-title") || "";
+    
+    var scrollTriggered = false;
+    var tooltipShown = false;
+
+    var baseMsg = articleTitle ? "Hola EJEZ! Estoy viendo el caso \"" + articleTitle + "\" y me gustaría hacerles una consulta: " : "Hola EJEZ! Me gustaría hacerles una consulta: ";
+    var whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(baseMsg);
+    
+    whatsappBtn.setAttribute("href", whatsappUrl);
+
+    function checkScrollForWhatsapp() {
+      if (scrollTriggered) return;
+      var scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      if (scrollPercent > 25 || window.scrollY > 400) {
+        whatsappFloat.classList.add("is-visible");
+        scrollTriggered = true;
+        
+        if (whatsappTooltip && window.innerWidth > 768) {
+          setTimeout(function() {
+            whatsappTooltip.classList.add("is-active");
+            tooltipShown = true;
+            
+            setTimeout(function() {
+              whatsappTooltip.classList.remove("is-active");
+            }, 6000);
+          }, 1000);
+        }
+        
+        window.removeEventListener("scroll", checkScrollForWhatsapp);
+      }
+    }
+
+    if (whatsappTooltip) {
+      whatsappBtn.addEventListener("mouseenter", function() {
+        if (!tooltipShown && window.innerWidth > 768) {
+          whatsappTooltip.classList.add("is-active");
+        }
+      });
+      whatsappBtn.addEventListener("mouseleave", function() {
+        whatsappTooltip.classList.remove("is-active");
+      });
+    }
+
+    window.addEventListener("scroll", checkScrollForWhatsapp, { passive: true });
+    checkScrollForWhatsapp();
+  }
+
 })();

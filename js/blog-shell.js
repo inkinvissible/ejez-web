@@ -82,4 +82,59 @@
       closeMenu();
     }
   });
+
+  // WhatsApp Floating Button Logic
+  var whatsappFloat = document.getElementById("whatsapp-float");
+  if (whatsappFloat) {
+    var whatsappBtn = whatsappFloat.querySelector(".whatsapp-btn");
+    var whatsappTooltip = whatsappFloat.querySelector(".whatsapp-tooltip");
+    var phoneNumber = whatsappFloat.getAttribute("data-phone") || "5493512050889";
+    var articleTitle = whatsappFloat.getAttribute("data-article-title") || "";
+    
+    var scrollTriggered = false;
+    var tooltipShown = false;
+
+    // Build the dynamic URL
+    var baseMsg = "Hola EJEZ! Estoy leyendo su artículo \"" + articleTitle + "\" y me gustaría hacerles una consulta: ";
+    if (!articleTitle) {
+      baseMsg = "Hola EJEZ! Me gustaría hacerles una consulta: ";
+    }
+    var whatsappUrl = "https://wa.me/" + phoneNumber.replace(/\D/g, "") + "?text=" + encodeURIComponent(baseMsg);
+    whatsappBtn.setAttribute("href", whatsappUrl);
+
+    // Scroll Handler
+    var checkScroll = function () {
+      var scrollPos = window.scrollY || window.pageYOffset;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      
+      if (docHeight > 0) {
+        var scrollPercentage = (scrollPos / docHeight) * 100;
+        
+        // Show button after 30% scroll
+        if (scrollPercentage >= 30) {
+          if (!scrollTriggered) {
+            whatsappFloat.classList.add("is-visible");
+            scrollTriggered = true;
+            
+            // Show teaser tooltip after 1.2s delay
+            setTimeout(function () {
+              if (whatsappTooltip && !tooltipShown) {
+                whatsappTooltip.classList.add("is-active");
+                tooltipShown = true;
+                
+                // Hide tooltip after 5 seconds
+                setTimeout(function () {
+                  whatsappTooltip.classList.remove("is-active");
+                }, 5000);
+              }
+            }, 1200);
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", checkScroll, { passive: true });
+    // Check initial scroll position
+    checkScroll();
+  }
 })();

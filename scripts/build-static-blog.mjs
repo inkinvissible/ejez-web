@@ -714,6 +714,17 @@ ${renderNav("blog")}
   </div>
 </main>
 ${renderFooter(siteSettings.footerText)}
+
+<!-- Botón Flotante de WhatsApp -->
+<div id="whatsapp-float" class="whatsapp-float-container" data-phone="5493512050889" data-article-title="${escapeHtml(entryTitle)}">
+  <div class="whatsapp-tooltip">¿Alguna duda? Escribinos por WhatsApp</div>
+  <a href="#" class="whatsapp-btn" aria-label="Contactar por WhatsApp" target="_blank" rel="noopener">
+    <svg class="whatsapp-icon" viewBox="0 0 24 24" width="24" height="24">
+      <path fill="currentColor" d="M12.012 2c-5.506 0-9.988 4.482-9.988 9.988 0 1.76.458 3.477 1.332 4.992L2 22l5.163-1.355c1.47.802 3.125 1.224 4.836 1.225h.005c5.505 0 9.987-4.482 9.987-9.988 0-2.669-1.039-5.178-2.926-7.065A9.923 9.923 0 0 0 12.012 2zm5.795 13.914c-.319.897-1.848 1.647-2.531 1.745-.61.088-1.408.156-2.268-.121-.527-.169-1.196-.445-2.008-.857-3.415-1.74-5.617-5.228-5.787-5.457-.17-.229-1.36-1.813-1.36-3.461 0-1.647.86-2.454 1.168-2.775.309-.32.68-.399.904-.399.223 0 .446.002.639.01.203.009.476-.078.745.568.277.667.947 2.31 1.028 2.477.081.168.136.363.025.586-.111.222-.167.362-.335.558-.168.196-.353.438-.504.587-.168.167-.344.348-.148.683.196.336.87 1.431 1.867 2.316.897.797 1.657 1.042 1.993 1.21.336.168.53.14.726-.084.197-.224.84-1.028 1.066-1.38.226-.353.453-.294.761-.179.308.115 1.956.924 2.294 1.093.339.169.565.253.649.397.084.145.084.84-.235 1.737z"/>
+    </svg>
+  </a>
+</div>
+
 <script src="js/blog-shell.js" defer></script>
 <script type="application/ld+json">${jsonLd(jsonLdPayload)}</script>
 </body>
@@ -896,7 +907,10 @@ async function build() {
     `${config.siteUrl}/servicios/desarrollo-web-cordoba.html`,
     `${config.siteUrl}/servicios/automatizaciones-n8n.html`,
     `${config.siteUrl}/servicios/infraestructura-self-hosted.html`,
-    `${config.siteUrl}/servicios/inteligencia-artificial.html`
+    `${config.siteUrl}/servicios/inteligencia-artificial.html`,
+    `${config.siteUrl}/casos/ramayon-house.html`,
+    `${config.siteUrl}/casos/ecorise.html`,
+    `${config.siteUrl}/casos/discor.html`
   ];
 
   for (const entry of entries) {
