@@ -152,6 +152,14 @@
 				</ul>
 			</section>
 
+			<section class="case-section is-challenge">
+				<p class="case-section-kicker"><span class="icon-setting"></span>El Reto Técnico</p>
+				<h2>Seguridad en la integración de APIs y funciones serverless</h2>
+				<p>El principal obstáculo en este desarrollo no estuvo en diseñar la interfaz visual del calendario, sino en la <strong>arquitectura de comunicación segura con la API de Airbnb</strong> para consultar y sincronizar la disponibilidad en tiempo real.</p>
+				<p>Realizar peticiones HTTP directas desde el propio navegador del usuario (frontend) hacia la API externa planteaba dos problemas críticos: por un lado, exponía públicamente en el código cliente las credenciales y llaves secretas de autenticación del apart-hotel; por el otro, chocaba contra las políticas de CORS (Cross-Origin Resource Sharing) del navegador, bloqueando la conexión de forma sistemática.</p>
+				<p><strong>Cómo lo resolvimos:</strong> Diseñamos una arquitectura desacoplada y segura. Desarrollamos y desplegamos una <strong>función serverless (serverless function)</strong> en el backend que actúa como un proxy seguro. Cuando un visitante consulta el calendario, la web se comunica con esta función intermediaria; esta inyecta las credenciales encriptadas en el lado del servidor, realiza la consulta de manera segura a Airbnb y devuelve al frontend la información procesada y limpia. Logramos una sincronización en tiempo real robusta y veloz que protege al 100% las llaves de acceso del negocio.</p>
+			</section>
+
 			<section class="case-section">
 				<p class="case-section-kicker">La Solución</p>
 				<h2>Sitio web multi-page con sistema de precios dinámicos integrado</h2>
@@ -193,9 +201,37 @@
 				</div>
 			</section>
 			
-			<div class="case-others">
-				<a href="ecorise.html">Ver caso EcoRise</a>
-				<a href="discor.html">Ver caso Discor</a>
+			<div class="case-others-container">
+				<p class="case-section-kicker align-center">Explorá otros proyectos</p>
+				<h2>Más soluciones con firma EJE Z</h2>
+				
+				<div class="case-others-grid">
+					<!-- Card 1: EcoRise -->
+					<a href="ecorise.html" class="case-card-link">
+						<article class="case-card-premium">
+							<div class="case-card-image-wrap">
+								<img src="../images/ecorise-landing.png" alt="Caso EcoRise: CRM a medida y web corporativa por EJE Z" loading="lazy">
+							</div>
+							<div class="case-card-content">
+								<span class="case-card-category">CRM & Web</span>
+								<h3 class="case-card-title">EcoRise: De Planillas a un CRM Propio <span class="case-card-arrow">↗</span></h3>
+							</div>
+						</article>
+					</a>
+					
+					<!-- Card 2: Discor -->
+					<a href="discor.html" class="case-card-link">
+						<article class="case-card-premium">
+							<div class="case-card-image-wrap">
+								<img src="../images/discor-landing-page.png" alt="Caso Discor: Catálogo Inteligente y ERP custom por EJE Z" loading="lazy">
+							</div>
+							<div class="case-card-content">
+								<span class="case-card-category">IA & ERP</span>
+								<h3 class="case-card-title">Discor: Migración ERP + IA para Autopartes <span class="case-card-arrow">↗</span></h3>
+							</div>
+						</article>
+					</a>
+				</div>
 			</div>
 			
 		</div>

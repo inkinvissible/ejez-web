@@ -42,6 +42,7 @@
 		<link rel="stylesheet" type="text/css" href="css/vendor.css">
 	</noscript>
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="css/casos.css">
 	<link rel="preload" href="images/logo-ejez.svg" as="image" type="image/svg+xml">
 
 	<!-- Google Analytics (GA4) -->
@@ -594,7 +595,7 @@
 									<img loading="lazy" decoding="async" src="images/ramayon-home.png" alt="Página principal de Ramayón House - sitio multi-page por Eje Z"
 										class="project-item">
 									<figcaption>
-										<h3><a href="#">Ramayón House</a></h3>
+										<h3><a href="casos/ramayon-house.html">Ramayón House</a></h3>
 										<div class="category-title">Alojamientos - Multi Page site</div>
 									</figcaption>
 								</figure>
@@ -621,7 +622,7 @@
 									<img loading="lazy" decoding="async" src="images/ecorise-home.png" alt="Página principal de EcoRise energía renovable por Eje Z"
 										class="project-item">
 									<figcaption>
-										<h3><a href="#">EcoRise</a></h3>
+										<h3><a href="casos/ecorise.html">EcoRise</a></h3>
 										<div class="category-title">Energía renovable - Multi Page site</div>
 									</figcaption>
 								</figure>
@@ -688,6 +689,61 @@
 			</div>
 		</div>
 
+	</section>
+
+	<section id="featured-cases" aria-labelledby="featured-cases-title" style="padding: 80px 0 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="inner-content">
+					<div class="section-header align-center">
+						<p class="section-kicker">Casos de Éxito</p>
+						<h2 class="section-title" id="featured-cases-title">Casos de Éxito Destacados</h2>
+						<p class="section-lead">Analizamos los retos reales de nuestros clientes y cómo diseñamos soluciones tecnológicas a medida que transformaron su operación diaria comercial y operativa.</p>
+					</div>
+					
+					<div class="case-others-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 40px;">
+						<!-- Card 1: EcoRise -->
+						<a href="casos/ecorise.html" class="case-card-link" data-aos="fade-up" data-aos-delay="100">
+							<article class="case-card-premium">
+								<div class="case-card-image-wrap">
+									<img src="images/ecorise-landing.png" alt="Caso EcoRise: CRM a medida y web corporativa por EJE Z" loading="lazy">
+								</div>
+								<div class="case-card-content">
+									<span class="case-card-category">CRM & Web</span>
+									<h3 class="case-card-title">EcoRise: De Planillas a un CRM Propio <span class="case-card-arrow">↗</span></h3>
+								</div>
+							</article>
+						</a>
+						
+						<!-- Card 2: Discor -->
+						<a href="casos/discor.html" class="case-card-link" data-aos="fade-up" data-aos-delay="200">
+							<article class="case-card-premium">
+								<div class="case-card-image-wrap">
+									<img src="images/discor-landing-page.png" alt="Caso Discor: Catálogo Inteligente y ERP B2B por EJE Z" loading="lazy">
+								</div>
+								<div class="case-card-content">
+									<span class="case-card-category">IA & ERP</span>
+									<h3 class="case-card-title">Discor: Migración ERP + IA para Autopartes <span class="case-card-arrow">↗</span></h3>
+								</div>
+							</article>
+						</a>
+
+						<!-- Card 3: Ramayón House -->
+						<a href="casos/ramayon-house.html" class="case-card-link" data-aos="fade-up" data-aos-delay="300">
+							<article class="case-card-premium">
+								<div class="case-card-image-wrap">
+									<img src="images/ramayon-precios.png" alt="Caso Ramayón House: Sistema de precios dinámicos y web por EJE Z" loading="lazy">
+								</div>
+								<div class="case-card-content">
+									<span class="case-card-category">Sistema & Web</span>
+									<h3 class="case-card-title">Ramayón House: Tarifas Dinámicas y Web <span class="case-card-arrow">↗</span></h3>
+								</div>
+							</article>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 
 	<section id="procedure" aria-labelledby="procedure-title">
@@ -830,9 +886,9 @@
 						<p class="section-lead">Somos dos co-fundadores con obsesión por los detalles, el rendimiento y el código limpio. Construimos EJE Z para que las empresas tengan un equipo técnico que realmente entiende su negocio y acompaña su crecimiento.</p>
 					</div>
 
-					<div class="team-grid" data-aos="fade-up">
+					<div class="team-grid">
 
-						<article class="team-card">
+						<article class="team-card" data-aos="fade-up" data-aos-delay="100">
 							<div class="team-card-avatar" aria-hidden="true">AM</div>
 							<div class="team-card-body">
 								<h3 class="team-card-name">Agustín Martín</h3>
@@ -847,7 +903,7 @@
 							</div>
 						</article>
 
-						<article class="team-card">
+						<article class="team-card" data-aos="fade-up" data-aos-delay="200">
 							<div class="team-card-avatar" aria-hidden="true">CP</div>
 							<div class="team-card-body">
 								<h3 class="team-card-name">Candelaria Pi&ntilde;a</h3>
@@ -879,30 +935,30 @@
 						<h3 class="section-title" id="faq-title">Todo lo que necesitás saber antes de empezar</h3>
 					</div>
 
-					<div class="faq-list" data-aos="fade-up">
+					<div class="faq-list">
 
-						<details class="faq-item">
+						<details class="faq-item" data-aos="fade-up" data-aos-delay="100">
 							<summary class="faq-question">¿Cuánto cuesta un sitio web con EJE Z?</summary>
 							<div class="faq-answer">
 								<p>Cada proyecto es diferente y el presupuesto depende de la complejidad, la cantidad de páginas, las integraciones necesarias y si incluye automatizaciones. Todo proyecto arranca con un Sprint de Arquitectura: un diagnóstico técnico con costo fijo. Si después avanzás con el desarrollo, ese monto se descuenta del total. Esto nos permite darte un presupuesto real, no una estimación a ciegas.</p>
 							</div>
 						</details>
 
-						<details class="faq-item">
+						<details class="faq-item" data-aos="fade-up" data-aos-delay="200">
 							<summary class="faq-question">¿En cuánto tiempo entregan un proyecto?</summary>
 							<div class="faq-answer">
 								<p>Un sitio web institucional típico tarda entre 3 y 5 semanas. Proyectos más complejos con automatizaciones, sistemas a medida o integraciones pueden tomar entre 6 y 12 semanas. Siempre definimos un cronograma en la etapa de planificación y mantenemos comunicación semanal sobre el avance.</p>
 							</div>
 						</details>
 
-						<details class="faq-item">
+						<details class="faq-item" data-aos="fade-up" data-aos-delay="300">
 							<summary class="faq-question">¿Qué tecnologías usan?</summary>
 							<div class="faq-answer">
 								<p>Trabajamos con HTML, CSS, JavaScript, React y Next.js para el desarrollo web. Para automatizaciones usamos n8n y Python. Toda la infraestructura es self-hosted en servidores propios del cliente, lo que garantiza control total sobre el código, los datos y la privacidad. No usamos plantillas ni WordPress: cada proyecto es desarrollado a medida.</p>
 							</div>
 						</details>
 
-						<details class="faq-item">
+						<details class="faq-item" data-aos="fade-up" data-aos-delay="400">
 							<summary class="faq-question">¿Ofrecen mantenimiento después del lanzamiento?</summary>
 							<div class="faq-answer">
 								<p>Sí. Ofrecemos planes de mantenimiento que incluyen monitoreo proactivo, actualizaciones de seguridad, consultoría técnica mensual y capacitación para tu equipo. A diferencia de otras agencias, nuestro mantenimiento incluye trabajo real: no cobramos por "no hacer nada".</p>

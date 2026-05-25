@@ -3238,3 +3238,11 @@ nav#navbar {
     padding: 64px 0;
   }
 }
+
+/* Fail-safe Fallback: si AOS tarda en cargar o el script no se ha inicializado,
+   mostramos todo el contenido por defecto para evitar pantallas en blanco */
+[data-aos]:not(.aos-init) {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}

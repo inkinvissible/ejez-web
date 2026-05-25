@@ -277,8 +277,22 @@
     if (typeof AOS !== "undefined") {
       AOS.init({
         duration: 900,
-        once: true
+        once: true,
+        offset: 50,
+        easing: 'ease-out-cubic'
       });
+      // Fix offset caching bug: refresh AOS when all images have loaded and Slick has initialized
+      setTimeout(function() {
+        AOS.refresh();
+      }, 500);
+      
+      if (document.readyState === 'complete') {
+        AOS.refresh();
+      } else {
+        window.addEventListener('load', function() {
+          AOS.refresh();
+        });
+      }
     }
   }
 

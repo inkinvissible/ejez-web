@@ -160,6 +160,14 @@
 				</div>
 			</section>
 
+			<section class="case-section is-challenge">
+				<p class="case-section-kicker"><span class="icon-setting"></span>El Reto Técnico</p>
+				<h2>Arqueología de bases de datos e integración de hardware</h2>
+				<p>Este proyecto nos exigió resolver dos desafíos de altísima complejidad técnica y operativa:</p>
+				<p>El primero fue <strong>la migración de datos desde un motor Firebird sumamente antiguo</strong> (tecnología de principios de los 2000 que jamás había sido actualizada). El ERP viejo tenía una estructura de base de datos denormalizada de forma caótica; las relaciones lógicas no estaban documentadas y los <code>JOINs</code> eran tan costosos computacionalmente que el software original metía casi todo en una misma tabla gigante. Descifrar ese laberinto para normalizarlo y migrar el historial comercial a un esquema moderno fue una verdadera tarea de arqueología de software.</p>
+				<p>El segundo fue <strong>la integración de hardware con las impresoras de etiquetas Zebra</strong> del depósito. En lugar de depender de los inestables drivers genéricos de Windows (que se desconfiguraban constantemente interrumpiendo el despacho), programamos la comunicación directa con los equipos. Diseñamos la integración escribiendo directamente en el lenguaje nativo de la impresora (<strong>ZPL - Zebra Programming Language</strong>), garantizando una impresión de códigos de barras instantánea, precisa y 100% robusta.</p>
+			</section>
+
 			<section class="case-section">
 				<p class="case-section-kicker">La Solución</p>
 				<h2>Sistema custom, catálogo B2B inteligente y búsqueda visual con IA</h2>
@@ -217,9 +225,37 @@
 				</div>
 			</section>
 			
-			<div class="case-others">
-				<a href="ramayon-house.html">Ver caso Ramayón House</a>
-				<a href="ecorise.html">Ver caso EcoRise</a>
+			<div class="case-others-container">
+				<p class="case-section-kicker align-center">Explorá otros proyectos</p>
+				<h2>Más soluciones con firma EJE Z</h2>
+				
+				<div class="case-others-grid">
+					<!-- Card 1: EcoRise -->
+					<a href="ecorise.html" class="case-card-link">
+						<article class="case-card-premium">
+							<div class="case-card-image-wrap">
+								<img src="../images/ecorise-landing.png" alt="Caso EcoRise: CRM a medida y web corporativa por EJE Z" loading="lazy">
+							</div>
+							<div class="case-card-content">
+								<span class="case-card-category">CRM & Web</span>
+								<h3 class="case-card-title">EcoRise: De Planillas a un CRM Propio <span class="case-card-arrow">↗</span></h3>
+							</div>
+						</article>
+					</a>
+					
+					<!-- Card 2: Ramayón House -->
+					<a href="ramayon-house.html" class="case-card-link">
+						<article class="case-card-premium">
+							<div class="case-card-image-wrap">
+								<img src="../images/ramayon-precios.png" alt="Caso Ramayón House: Sistema de tarifas y precios dinámicos por EJE Z" loading="lazy">
+							</div>
+							<div class="case-card-content">
+								<span class="case-card-category">Sistema & Web</span>
+								<h3 class="case-card-title">Ramayón House: Tarifas Dinámicas y Web <span class="case-card-arrow">↗</span></h3>
+							</div>
+						</article>
+					</a>
+				</div>
 			</div>
 			
 		</div>
