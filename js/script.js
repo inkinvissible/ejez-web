@@ -42,6 +42,10 @@
           }
           const nextState = !card.classList.contains('active');
           setExpandedState(card, nextState);
+          if (nextState && window.posthog) {
+            var cardTitle = card.querySelector('.service-card-title');
+            posthog.capture('service_card_expanded', { service: cardTitle ? cardTitle.textContent.trim() : '' });
+          }
         });
       });
 
@@ -172,6 +176,9 @@
       tab.classList.add('active');
       target.classList.add('active');
       refreshActiveProjectGrid(target);
+      if (window.posthog) {
+        posthog.capture('project_tab_switched', { tab: tab.textContent.trim() });
+      }
     });
   });
 
@@ -498,6 +505,9 @@
         : 'https://wa.me/?text=' + whatsappText;
 
       window.open(whatsappUrl, '_blank', 'noopener');
+      if (window.posthog) {
+        posthog.capture('whatsapp_contact_submitted', { source: 'contact_form' });
+      }
     });
   }
 
@@ -660,8 +670,40 @@
       });
     }
 
+    whatsappBtn.addEventListener("click", function() {
+      if (window.posthog) {
+        posthog.capture('whatsapp_float_clicked');
+      }
+    });
+
     window.addEventListener("scroll", checkScrollForWhatsapp, { passive: true });
     checkScrollForWhatsapp();
   }
+
+  document.querySelectorAll('.hero-cta-group a').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (window.posthog) {
+        posthog.capture('hero_cta_clicked', { label: btn.textContent.trim() });
+      }
+    });
+  });
+
+  var architectureCta = document.querySelector('#architecture-sprint .btn-accent');
+  if (architectureCta) {
+    architectureCta.addEventListener('click', function() {
+      if (window.posthog) {
+        posthog.capture('architecture_sprint_cta_clicked');
+      }
+    });
+  }
+
+  document.querySelectorAll('.faq-item').forEach(function(item) {
+    item.addEventListener('toggle', function() {
+      if (item.open && window.posthog) {
+        var question = item.querySelector('.faq-question');
+        posthog.capture('faq_item_opened', { question: question ? question.textContent.trim() : '' });
+      }
+    });
+  });
 
 })();

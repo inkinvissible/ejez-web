@@ -67,6 +67,20 @@
         currencySigns.forEach(sign => {
             sign.innerText = currency === 'USD' ? 'u$s' : '$';
         });
+
+        if (perdidaAnual > 0) {
+            clearTimeout(calculateInefficiency._captureTimer);
+            calculateInefficiency._captureTimer = setTimeout(function() {
+                if (window.posthog) {
+                    posthog.capture('calculator_result_calculated', {
+                        usuarios: usuarios,
+                        currency: currency,
+                        perdida_anual: perdidaAnual,
+                        perdida_5_years: perdida5Anios
+                    });
+                }
+            }, 1500);
+        }
     };
 
     // Event Listeners
