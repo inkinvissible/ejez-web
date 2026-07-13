@@ -32,6 +32,60 @@ function jsonLd(value) {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
 
+function posthogHeadScripts() {
+  return `<script src="js/cookie-banner.js" defer></script>
+  <script>
+    !(function (t, e) {
+      var o, n, p, r;
+      e.__SV ||
+        ((window.posthog = e),
+        (e._i = []),
+        (e.init = function (i, s, a) {
+          function g(t, e) {
+            var o = e.split(".");
+            (2 == o.length && ((t = t[o[0]]), (e = o[1])),
+              (t[e] = function () {
+                t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+              }));
+          }
+          (((p = t.createElement("script")).type = "text/javascript"),
+            (p.crossOrigin = "anonymous"),
+            (p.async = !0),
+            (p.src =
+              s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js"),
+            (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r));
+          var u = e;
+          for (
+            void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+              u.people = u.people || [],
+              u.toString = function (t) {
+                var e = "posthog";
+                return ("posthog" !== a && (e += "." + a), t || (e += " (stub)"), e);
+              },
+              u.people.toString = function () {
+                return u.toString(1) + ".people (stub)";
+              },
+              o =
+                "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(
+                  " ",
+                ),
+              n = 0;
+            n < o.length;
+            n++
+          )
+            g(u, o[n]);
+          e._i.push([i, s, a]);
+        }),
+        (e.__SV = 1));
+    })(document, window.posthog || []);
+    posthog.init("phc_m9CJMZgqrKWUavhV3UFLWDobMVt4sVwb5hBuvRFzJCGW", {
+      api_host: "https://us.i.posthog.com",
+      opt_out_capturing_by_default: true,
+      defaults: "2026-05-30",
+    });
+  </script>`;
+}
+
 function toImageUrl(assetRefOrUrl, config, options = {}) {
   if (!assetRefOrUrl) return "";
 
@@ -372,6 +426,27 @@ function articleRoutePath(entry) {
   return `blog/${articleRouteSlug(entry)}/`;
 }
 
+function articleAnalyticsPayload(entry, config) {
+  const title = String(entry.seoMetaTitle || entry.title || "Artículo").trim();
+  const detail = String(entry.seoMetaDescription || entry.excerpt || "").trim();
+  const kind = slugify(entry.kind || "entry") || "entry";
+  const slug = articleRouteSlug(entry);
+  const url = entry.canonicalUrl || `${config.siteUrl}/${articleRoutePath(entry)}`;
+
+  return {
+    title,
+    detail,
+    kind,
+    slug,
+    url
+  };
+}
+
+function articleClickTrackingAttrs(entry, config) {
+  const payload = articleAnalyticsPayload(entry, config);
+  return `data-posthog-event="blog_article_clicked" data-posthog-title="${escapeHtml(payload.title)}" data-posthog-detail="${escapeHtml(payload.detail)}" data-posthog-kind="${escapeHtml(payload.kind)}" data-posthog-slug="${escapeHtml(payload.slug)}" data-posthog-url="${escapeHtml(payload.url)}"`;
+}
+
 function pageHead({
   title,
   description,
@@ -413,6 +488,7 @@ function pageHead({
   <noscript><link rel="stylesheet" type="text/css" href="css/vendor.css"></noscript>
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" type="text/css" href="css/blog.css">
+  ${posthogHeadScripts()}
   <link rel="preload" href="images/logo-ejez.svg" as="image" type="image/svg+xml">
 </head>`;
 }
@@ -489,9 +565,10 @@ function blogCard(entry, config) {
   const readTime = Number(entry.readingTime) > 0 ? ` · ${Math.round(entry.readingTime)} min` : "";
   const excerpt = String(entry.excerpt || "").trim() || "Sin extracto disponible para este artículo.";
   const href = `${config.siteUrl}/${articleRoutePath(entry)}`;
+  const trackingAttrs = articleClickTrackingAttrs(entry, config);
 
   return `<article class="blog-card">
-  <a class="blog-card-media" href="${escapeHtml(href)}" aria-label="Abrir artículo ${escapeHtml(entry.title || "sin título")}">
+  <a ${trackingAttrs} class="blog-card-media js-track-blog-click" href="${escapeHtml(href)}" aria-label="Abrir artículo ${escapeHtml(entry.title || "sin título")}">
     ${cover
       ? `<img loading="lazy" decoding="async" src="${escapeHtml(cover)}" alt="${escapeHtml(entry.coverAlt || entry.title || "Portada del artículo")}" width="900" height="620">`
       : "<div class=\"blog-card-image-fallback\" aria-hidden=\"true\"></div>"}
@@ -501,7 +578,7 @@ function blogCard(entry, config) {
       <span class="blog-card-category">${escapeHtml(primaryTag)}</span>
       <span class="blog-card-date">${escapeHtml(formatDate(entry.publishedAt, config.defaultLocale))}</span>
     </div>
-    <h2 class="blog-card-title"><a href="${escapeHtml(href)}">${escapeHtml(entry.title || "Artículo sin título")}</a></h2>
+    <h2 class="blog-card-title"><a ${trackingAttrs} href="${escapeHtml(href)}">${escapeHtml(entry.title || "Artículo sin título")}</a></h2>
     <p class="blog-card-excerpt">${escapeHtml(excerpt)}</p>
     <p class="blog-card-author">Por ${escapeHtml(authors)}${readTime}</p>
   </div>
@@ -527,6 +604,7 @@ function renderLandingBlogPost(entry, config, isFeatured) {
   const excerpt = String(entry.excerpt || "").trim();
   const title = entry.title || "Artículo sin título";
   const columnClass = `column${isFeatured ? " is-featured" : ""}`;
+  const trackingAttrs = articleClickTrackingAttrs(entry, config);
 
   const imageHtml = cover
     ? `<img loading="lazy" decoding="async" src="${escapeHtml(cover)}" alt="${escapeHtml(entry.coverAlt || title)}" class="post-image">`
@@ -536,7 +614,7 @@ function renderLandingBlogPost(entry, config, isFeatured) {
 						<article class="${columnClass}">
 
 							<figure>
-								<a href="${escapeHtml(href)}" class="image-hvr-effect">
+								<a ${trackingAttrs} class="image-hvr-effect js-track-blog-click" href="${escapeHtml(href)}">
 									${imageHtml}
 								</a>
 							</figure>
@@ -545,16 +623,16 @@ function renderLandingBlogPost(entry, config, isFeatured) {
 
 								<div class="meta-tag">
 									<div class="meta-date">${escapeHtml(dateLabel)}</div>
-									<a href="${escapeHtml(href)}" class="categories">${escapeHtml(primaryTag)}</a>
+									<a ${trackingAttrs} class="categories js-track-blog-click" href="${escapeHtml(href)}">${escapeHtml(primaryTag)}</a>
 								</div>
 
 								<h3 class="post-title">
-									<a href="${escapeHtml(href)}">${escapeHtml(title)}</a>
+									<a ${trackingAttrs} href="${escapeHtml(href)}">${escapeHtml(title)}</a>
 								</h3>
 								${excerpt ? `<p class="post-excerpt">${escapeHtml(excerpt)}</p>` : ""}
 								<div class="post-footer">
 									${readTime ? `<span class="post-reading-time">${escapeHtml(readTime)}</span>` : ""}
-									<a href="${escapeHtml(href)}" class="post-cta">Leer articulo</a>
+									<a ${trackingAttrs} class="post-cta js-track-blog-click" href="${escapeHtml(href)}">Leer articulo</a>
 								</div>
 
 							</div>
@@ -650,6 +728,7 @@ function renderArticlePage(entry, config, siteSettings) {
     .map((item) => `<span class="article-meta-item">${escapeHtml(item)}</span>`)
     .join("");
   const articleBody = renderPortableText(entry.body, config);
+  const analyticsPayload = articleAnalyticsPayload(entry, config);
 
   const jsonLdPayload = {
     "@context": "https://schema.org",
@@ -725,6 +804,14 @@ ${renderFooter(siteSettings.footerText)}
   </a>
 </div>
 
+<script>
+  (function () {
+    if (!window.posthog || typeof window.posthog.capture !== "function") {
+      return;
+    }
+    window.posthog.capture("blog_article_viewed", ${jsonLd(analyticsPayload)});
+  })();
+</script>
 <script src="js/blog-shell.js" defer></script>
 <script type="application/ld+json">${jsonLd(jsonLdPayload)}</script>
 </body>

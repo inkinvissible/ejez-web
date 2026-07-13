@@ -697,6 +697,25 @@
     });
   }
 
+  document.addEventListener("click", function (event) {
+    var target = event.target;
+    if (!target || typeof target.closest !== "function") {
+      return;
+    }
+    var link = target.closest("a[data-posthog-event]");
+    if (!link || !window.posthog || typeof window.posthog.capture !== "function") {
+      return;
+    }
+
+    window.posthog.capture(link.getAttribute("data-posthog-event"), {
+      title: link.getAttribute("data-posthog-title") || "",
+      detail: link.getAttribute("data-posthog-detail") || "",
+      kind: link.getAttribute("data-posthog-kind") || "",
+      slug: link.getAttribute("data-posthog-slug") || "",
+      url: link.getAttribute("data-posthog-url") || ""
+    });
+  });
+
   document.querySelectorAll('.faq-item').forEach(function(item) {
     item.addEventListener('toggle', function() {
       if (item.open && window.posthog) {
