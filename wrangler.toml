@@ -1,0 +1,6 @@
+name = "ejez-web"
+compatibility_date = "2026-07-16"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = ".site"
