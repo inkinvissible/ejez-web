@@ -1012,7 +1012,7 @@ async function build() {
   }
 
   await fs.writeFile(path.join(outputDir, "sitemap.xml"), sitemapXml(urls), "utf8");
-  await fs.writeFile(path.join(outputDir, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${config.siteUrl}/sitemap.xml\n`, "utf8");
+  await fs.writeFile(path.join(outputDir, "robots.txt"), `User-agent: *\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nSitemap: ${config.siteUrl}/sitemap.xml\n`, "utf8");
   await fs.writeFile(path.join(outputDir, ".nojekyll"), "", "utf8");
 
   console.log(`Static build completed. Entries rendered: ${entries.length}`);
