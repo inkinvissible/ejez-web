@@ -1,6 +1,8 @@
 name = "ejez-web"
 compatibility_date = "2026-07-16"
 compatibility_flags = ["nodejs_compat"]
+main = "src/index.js"
 
 [assets]
 directory = ".site"
+run_worker_first = true
