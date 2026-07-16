@@ -34,6 +34,15 @@ export default {
     }
 
     // Fallback to normal behavior (serve HTML/static assets)
-    return env.ASSETS.fetch(request);
+    let response = await env.ASSETS.fetch(request);
+    
+    // Add Link header to the homepage for agent discovery
+    const currentUrl = new URL(request.url);
+    if (currentUrl.pathname === '/' || currentUrl.pathname === '/index.html') {
+      response = new Response(response.body, response);
+      response.headers.set('Link', '</index.md>; rel="alternate"; type="text/markdown"');
+    }
+    
+    return response;
   }
 }
