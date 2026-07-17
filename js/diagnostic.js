@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const quizContainer = container.querySelector('.diagnostic-quiz-container');
 
     let currentQuestionIndex = 0;
-    let scores = {}; // resultKey -> total points
+    let totalScore = 0;
 
     startBtn.addEventListener('click', () => {
       if (window.posthog) {
@@ -40,57 +40,90 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const question = diagnosticData.questions[currentQuestionIndex];
       const progress = ((currentQuestionIndex) / diagnosticData.questions.length) * 100;
+      const isMultiple = !!question.allowMultiple;
 
-      const html = `
+      let html = `
         <div class="diagnostic-progress-bar" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">
           <div class="diagnostic-progress-fill" style="width: ${progress}%"></div>
         </div>
         <div class="diagnostic-question-wrapper fade-in">
-          <p class="diagnostic-step">Pregunta ${currentQuestionIndex + 1} de ${diagnosticData.questions.length}</p>
+          <p class="diagnostic-step">Pregunta ${currentQuestionIndex + 1} de ${diagnosticData.questions.length} ${isMultiple ? '(Selección Múltiple)' : ''}</p>
           <h4 class="diagnostic-question-text">${escapeHtml(question.questionText)}</h4>
-          <div class="diagnostic-options">
-            ${question.options.map((opt, idx) => `
-              <button class="diagnostic-option-btn" data-index="${idx}">
-                ${escapeHtml(opt.label)}
-              </button>
-            `).join('')}
-          </div>
-        </div>
+          <div class="diagnostic-options ${isMultiple ? 'diagnostic-options-multiple' : ''}">
       `;
+
+      if (isMultiple) {
+        html += question.options.map((opt, idx) => `
+          <label class="diagnostic-option-label">
+            <input type="checkbox" class="diagnostic-option-checkbox" data-index="${idx}">
+            <span class="diagnostic-option-text">${escapeHtml(opt.label)}</span>
+          </label>
+        `).join('');
+        html += `</div>
+          <button class="btn btn-primary diagnostic-next-btn" style="margin-top: 24px; width: 100%;">Siguiente pregunta</button>
+        </div>`;
+      } else {
+        html += question.options.map((opt, idx) => `
+          <button class="diagnostic-option-btn" data-index="${idx}">
+            ${escapeHtml(opt.label)}
+          </button>
+        `).join('');
+        html += `</div></div>`;
+      }
 
       quizContainer.innerHTML = html;
 
-      const optionBtns = quizContainer.querySelectorAll('.diagnostic-option-btn');
-      optionBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-          const idx = parseInt(this.getAttribute('data-index'));
-          const selectedOption = question.options[idx];
+      if (isMultiple) {
+        const nextBtn = quizContainer.querySelector('.diagnostic-next-btn');
+        const checkboxes = quizContainer.querySelectorAll('.diagnostic-option-checkbox');
+        
+        nextBtn.addEventListener('click', () => {
+          checkboxes.forEach(cb => {
+            if (cb.checked) {
+              const idx = parseInt(cb.getAttribute('data-index'));
+              const selectedOption = question.options[idx];
+              totalScore += (selectedOption.points || 0);
 
-          if (window.posthog) {
-            window.posthog.capture('diagnostic_answer', {
-              diagnostic_title: diagnosticData.title,
-              question: question.questionText,
-              answer: selectedOption.label
-            });
-          }
-
-          // Accumulate scores
-          if (selectedOption.scores) {
-            selectedOption.scores.forEach(s => {
-              scores[s.resultKey] = (scores[s.resultKey] || 0) + s.points;
-            });
-          }
-
-          // Visual feedback
-          this.classList.add('selected');
-          optionBtns.forEach(b => b.disabled = true);
-
-          setTimeout(() => {
-            currentQuestionIndex++;
-            renderQuestion();
-          }, 300);
+              if (window.posthog) {
+                window.posthog.capture('diagnostic_answer', {
+                  diagnostic_title: diagnosticData.title,
+                  question: question.questionText,
+                  answer: selectedOption.label
+                });
+              }
+            }
+          });
+          currentQuestionIndex++;
+          renderQuestion();
         });
-      });
+      } else {
+        const optionBtns = quizContainer.querySelectorAll('.diagnostic-option-btn');
+        optionBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            const idx = parseInt(this.getAttribute('data-index'));
+            const selectedOption = question.options[idx];
+
+            if (window.posthog) {
+              window.posthog.capture('diagnostic_answer', {
+                diagnostic_title: diagnosticData.title,
+                question: question.questionText,
+                answer: selectedOption.label
+              });
+            }
+
+            totalScore += (selectedOption.points || 0);
+
+            // Visual feedback
+            this.classList.add('selected');
+            optionBtns.forEach(b => b.disabled = true);
+
+            setTimeout(() => {
+              currentQuestionIndex++;
+              renderQuestion();
+            }, 300);
+          });
+        });
+      }
     }
 
     function finishDiagnostic() {
@@ -101,26 +134,18 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       quizContainer.innerHTML = progressHtml;
 
-      // Determine result
-      let winningKey = null;
-      let maxPoints = -1;
-      
-      for (const [key, pts] of Object.entries(scores)) {
-        if (pts > maxPoints) {
-          maxPoints = pts;
-          winningKey = key;
-        }
-      }
-
       const results = diagnosticData.results || [];
-      // Default to first result if no winner
-      const result = results.find(r => r.key === winningKey) || results[0];
+      // Find the result where totalScore falls in the range
+      let result = results.find(r => totalScore >= (r.minScore || 0) && totalScore <= (r.maxScore || 1000));
+      
+      // Default to first result if no match is found for some reason
+      if (!result) result = results[0];
 
       if (window.posthog) {
         window.posthog.capture('diagnostic_completed', {
           diagnostic_title: diagnosticData.title,
-          result_key: result?.key,
-          result_title: result?.title
+          result_title: result?.title,
+          total_score: totalScore
         });
       }
 
@@ -130,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function showResultModal(result) {
       if (!result) return;
       
-      // Check if dialog exists, else create it
       let dialog = document.getElementById('diagnostic-result-modal');
       if (!dialog) {
         dialog = document.createElement('dialog');
@@ -142,13 +166,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const icon = result.icon || '🎯';
       const ctaText = result.ctaText || 'Consultar ahora';
       
-      // WhatsApp link generator
       let waLink = '#';
       if (result.ctaWhatsApp) {
-        // Find float WA button for phone number if possible, or fallback to standard EjeZ number
         const floatWA = document.getElementById('whatsapp-float');
         const phone = floatWA ? floatWA.getAttribute('data-phone') : '5493512050889';
-        const msg = encodeURIComponent(result.ctaWhatsApp);
+        // Add total score context to whatsapp message
+        const msg = encodeURIComponent(result.ctaWhatsApp + ` (Mi puntaje en el diagnóstico fue: ${totalScore} pts)`);
         waLink = `https://wa.me/${phone}?text=${msg}`;
       }
 
@@ -173,13 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       dialog.querySelector('.diagnostic-modal-restart').addEventListener('click', () => {
         dialog.close();
-        // Reset state
         currentQuestionIndex = 0;
-        scores = {};
+        totalScore = 0;
         renderQuestion();
       });
 
-      // Close on backdrop click
       dialog.addEventListener('click', (e) => {
         const dialogDimensions = dialog.getBoundingClientRect();
         if (
