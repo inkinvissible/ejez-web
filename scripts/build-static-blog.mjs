@@ -286,6 +286,30 @@ function renderTableBlock(block) {
   return html;
 }
 
+function renderDiagnosticBlock(block) {
+  if (!block.diagnostic) return "";
+  const diag = block.diagnostic;
+  const title = diag.title || "Diagnóstico";
+  const desc = diag.description || "";
+  const ctaLabel = diag.ctaLabel || "Empezar diagnóstico";
+  
+  // Convert diag object to JSON, safely escaped for data attribute
+  const diagData = escapeHtml(JSON.stringify(diag));
+
+  return `
+    <div class="article-diagnostic" data-diagnostic="${diagData}">
+      <div class="diagnostic-intro">
+        <h3 class="diagnostic-title">${escapeHtml(title)}</h3>
+        ${desc ? `<p class="diagnostic-description">${escapeHtml(desc)}</p>` : ""}
+        <button class="diagnostic-btn-start btn btn-primary mt-3">${escapeHtml(ctaLabel)}</button>
+      </div>
+      <div class="diagnostic-quiz-container" style="display: none;">
+         <!-- JavaScript will render the quiz here -->
+      </div>
+    </div>
+  `;
+}
+
 function renderCalloutBlock(block, config) {
   const tone = normalizeCalloutTone(
     pickStringField(block, ["tone", "variant", "style", "type"])
@@ -394,6 +418,12 @@ function renderPortableText(blocks, config, options = {}) {
 
     if (block._type === "callout") {
       html += renderCalloutBlock(block, config);
+      continue;
+    }
+
+    if (block._type === "diagnosticEmbed") {
+      html += renderDiagnosticBlock(block);
+      continue;
     }
   }
 
@@ -814,6 +844,7 @@ ${renderFooter(siteSettings.footerText)}
   })();
 </script>
 <script src="js/blog-shell.js" defer></script>
+${articleBody.includes('class="article-diagnostic"') ? '<script src="js/diagnostic.js" defer></script>' : ''}
 <script type="application/ld+json">${jsonLd(jsonLdPayload)}</script>
 </body>
 </html>`;
@@ -891,6 +922,14 @@ async function getEntries(config) {
       "      caption,",
       "      hasHeaderRow,",
       "      \"rows\": rows[]{cells}",
+      "    },",
+      "    _type == \"diagnosticEmbed\" => {",
+      "      \"_type\": \"diagnosticEmbed\",",
+      "      \"diagnostic\": diagnostic->{",
+      "        title, slug, description, ctaLabel,",
+      "        questions[]{questionText, options[]{label, scores[]{resultKey, points}}},",
+      "        results[]{key, title, description, ctaText, ctaWhatsApp, icon}",
+      "      }",
       "    }",
       "  }",
       "}"
