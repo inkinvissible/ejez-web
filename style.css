@@ -1685,6 +1685,284 @@ nav#navbar {
     box-shadow: 0 8px 20px rgba(15,45,36,0.08);
 }
 
+/** Diagnostic Quiz - Bolder Variant
+--------------------------------------------------------------*/
+.article-diagnostic {
+  background: var(--color-primary);
+  color: var(--color-ivory);
+  border-radius: 16px;
+  padding: 48px;
+  margin: 64px 0;
+  box-shadow: 0 24px 48px rgba(15, 45, 36, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.article-diagnostic::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: var(--color-ivory);
+}
+
+.diagnostic-intro {
+  text-align: left;
+  max-width: 600px;
+}
+
+.diagnostic-title {
+  color: #ffffff;
+  margin-bottom: 16px;
+  font-size: 2.25rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.diagnostic-description {
+  color: rgba(245, 240, 230, 0.8);
+  margin-bottom: 32px;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.diagnostic-btn-start {
+  background: var(--color-ivory);
+  color: var(--color-primary);
+  border: none;
+  font-size: 1.1rem;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.diagnostic-btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 240, 230, 0.2);
+}
+
+.diagnostic-progress-bar {
+  background: rgba(245, 240, 230, 0.15);
+  border-radius: 100px;
+  height: 6px;
+  width: 100%;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+
+.diagnostic-progress-fill {
+  background: var(--color-ivory);
+  height: 100%;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.diagnostic-question-wrapper {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.diagnostic-step {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(245, 240, 230, 0.6);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.diagnostic-question-text {
+  font-size: 1.75rem;
+  color: #ffffff;
+  margin-bottom: 32px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.diagnostic-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.diagnostic-option-btn {
+  background: rgba(245, 240, 230, 0.05);
+  border: 1px solid rgba(245, 240, 230, 0.15);
+  border-radius: 8px;
+  padding: 20px 24px;
+  font-size: 1.15rem;
+  color: var(--color-ivory);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.diagnostic-option-btn:hover {
+  background: rgba(245, 240, 230, 0.1);
+  border-color: rgba(245, 240, 230, 0.3);
+}
+
+.diagnostic-option-btn.selected {
+  background: var(--color-ivory);
+  color: var(--color-primary);
+  border-color: var(--color-ivory);
+}
+
+.diagnostic-option-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(245, 240, 230, 0.05);
+  border: 1px solid rgba(245, 240, 230, 0.15);
+  border-radius: 8px;
+  padding: 20px 24px;
+  font-size: 1.15rem;
+  color: var(--color-ivory);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.diagnostic-option-label:hover {
+  background: rgba(245, 240, 230, 0.1);
+  border-color: rgba(245, 240, 230, 0.3);
+}
+
+.diagnostic-option-checkbox {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.diagnostic-next-btn {
+  background: var(--color-ivory);
+  color: var(--color-primary);
+  border: none;
+  font-size: 1.1rem;
+  padding: 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  margin-top: 32px !important;
+}
+
+.diagnostic-next-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 240, 230, 0.2);
+}
+
+/* Modal styles - keeping these light to contrast with the dark widget when finished */
+.diagnostic-modal {
+  padding: 0;
+  border: none;
+  border-radius: 24px;
+  max-width: 540px;
+  width: 90%;
+  background: #ffffff;
+  box-shadow: 0 24px 64px rgba(15, 45, 36, 0.3);
+}
+
+.diagnostic-modal::backdrop {
+  background: rgba(15, 45, 36, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.diagnostic-modal-content {
+  padding: 48px 40px;
+  position: relative;
+  text-align: center;
+}
+
+.diagnostic-modal-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: var(--color-ivory);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.diagnostic-modal-close:hover {
+  background: var(--color-ivory-deep);
+}
+
+.diagnostic-result-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+}
+
+.diagnostic-result-title {
+  color: var(--color-primary);
+  margin-bottom: 16px;
+  font-size: 2rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.diagnostic-result-description {
+  color: var(--color-muted);
+  margin-bottom: 40px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.diagnostic-result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.diagnostic-result-actions .btn {
+  width: 100%;
+  padding: 16px;
+  justify-content: center;
+  font-size: 1.1rem;
+  border-radius: 12px;
+}
+
+.diagnostic-result-actions .btn-primary {
+  background: var(--color-primary);
+  color: #ffffff;
+  border: 1px solid var(--color-primary);
+  font-weight: 600;
+}
+
+.diagnostic-result-actions .btn-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-line);
+  font-weight: 600;
+}
+
+.diagnostic-result-actions .btn-outline:hover {
+  border-color: var(--color-primary);
+  background: rgba(15, 45, 36, 0.03);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .article-diagnostic {
+    padding: 32px 24px;
+    margin: 48px -16px;
+    border-radius: 0;
+  }
+}
+
 #projects .slick-arrow {
     position: absolute;
     top: calc(50% - 16px);
