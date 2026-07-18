@@ -163,7 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(dialog);
       }
 
-      const icon = result.icon || '🎯';
+      // Si el usuario no puso icono, usamos un SVG premium por defecto.
+      // Si el usuario puso un emoji, lo mostramos, pero le diremos que lo saque.
+      const defaultIcon = `<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg>`;
+      const icon = result.icon || defaultIcon;
       const ctaText = result.ctaText || 'Consultar ahora';
       
       let waLink = '#';
