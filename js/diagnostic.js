@@ -127,19 +127,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function finishDiagnostic() {
-      const progressHtml = `
-        <div class="diagnostic-progress-bar">
-          <div class="diagnostic-progress-fill" style="width: 100%"></div>
-        </div>
-      `;
-      quizContainer.innerHTML = progressHtml;
-
       const results = diagnosticData.results || [];
       // Find the result where totalScore falls in the range
       let result = results.find(r => totalScore >= (r.minScore || 0) && totalScore <= (r.maxScore || 1000));
       
       // Default to first result if no match is found for some reason
       if (!result) result = results[0];
+
+      quizContainer.innerHTML = `
+        <div class="diagnostic-progress-bar">
+          <div class="diagnostic-progress-fill" style="width: 100%"></div>
+        </div>
+        <div class="diagnostic-question-wrapper fade-in" style="text-align: center;">
+          <h4 class="diagnostic-question-text" style="margin-bottom: 16px;">¡Diagnóstico completado!</h4>
+          <p class="diagnostic-step" style="margin-bottom: 32px; text-transform: none; font-size: 1.1rem; color: rgba(245, 240, 230, 0.9);">Tu resultado: <strong>${escapeHtml(result.title)}</strong></p>
+          <div class="diagnostic-options" style="align-items: center;">
+            <button class="diagnostic-next-btn btn-show-modal" style="margin-top: 0 !important; width: 100%; max-width: 320px;">Ver mi resultado detallado</button>
+            <button class="diagnostic-option-btn btn-restart" style="width: 100%; max-width: 320px; text-align: center; margin-top: 8px;">Rehacer diagnóstico</button>
+          </div>
+        </div>
+      `;
+
+      quizContainer.querySelector('.btn-show-modal').addEventListener('click', () => {
+        showResultModal(result);
+      });
+
+      quizContainer.querySelector('.btn-restart').addEventListener('click', () => {
+        currentQuestionIndex = 0;
+        totalScore = 0;
+        renderQuestion();
+      });
 
       if (window.posthog) {
         window.posthog.capture('diagnostic_completed', {
