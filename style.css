@@ -1727,12 +1727,12 @@ nav#navbar {
 
 .article-diagnostic strong,
 .article-diagnostic b {
-  color: #ffffff;
+  color: #ffffff !important;
   font-weight: 700;
 }
 
 .article-diagnostic a {
-  color: #ffffff;
+  color: #ffffff !important;
   text-decoration: underline;
 }
 
