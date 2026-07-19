@@ -1705,12 +1705,12 @@ nav#navbar {
   background: var(--color-ivory);
 }
 
-.diagnostic-intro {
+.article-diagnostic .diagnostic-intro {
   text-align: left;
   max-width: 600px;
 }
 
-.diagnostic-title {
+.article-diagnostic .diagnostic-title {
   color: #ffffff;
   margin-bottom: 16px;
   font-size: 2.25rem;
@@ -1718,14 +1718,14 @@ nav#navbar {
   letter-spacing: -0.02em;
 }
 
-.diagnostic-description {
+.article-diagnostic .diagnostic-description {
   color: rgba(245, 240, 230, 0.8);
   margin-bottom: 32px;
   font-size: 1.15rem;
   line-height: 1.6;
 }
 
-.diagnostic-btn-start {
+.article-diagnostic .diagnostic-btn-start {
   background: var(--color-ivory);
   color: var(--color-primary);
   border: none;
@@ -1735,12 +1735,12 @@ nav#navbar {
   font-weight: 600;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.diagnostic-btn-start:hover {
+.article-diagnostic .diagnostic-btn-start:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(245, 240, 230, 0.2);
 }
 
-.diagnostic-progress-bar {
+.article-diagnostic .diagnostic-progress-bar {
   background: rgba(245, 240, 230, 0.15);
   border-radius: 100px;
   height: 6px;
@@ -1764,7 +1764,7 @@ nav#navbar {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.diagnostic-step {
+.article-diagnostic .diagnostic-step {
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1773,21 +1773,21 @@ nav#navbar {
   font-weight: 600;
 }
 
-.diagnostic-question-text {
+.article-diagnostic .diagnostic-question-text {
   font-size: 1.75rem;
-  color: #ffffff;
+  color: #ffffff !important;
   margin-bottom: 32px;
   line-height: 1.25;
   letter-spacing: -0.01em;
 }
 
-.diagnostic-options {
+.article-diagnostic .diagnostic-options {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.diagnostic-option-btn {
+.article-diagnostic .diagnostic-option-btn {
   background: rgba(245, 240, 230, 0.05);
   border: 1px solid rgba(245, 240, 230, 0.15);
   border-radius: 8px;
@@ -1801,18 +1801,18 @@ nav#navbar {
   font-weight: 500;
 }
 
-.diagnostic-option-btn:hover {
+.article-diagnostic .diagnostic-option-btn:hover {
   background: rgba(245, 240, 230, 0.1);
   border-color: rgba(245, 240, 230, 0.3);
 }
 
-.diagnostic-option-btn.selected {
+.article-diagnostic .diagnostic-option-btn.selected {
   background: var(--color-ivory);
   color: var(--color-primary);
   border-color: var(--color-ivory);
 }
 
-.diagnostic-option-label {
+.article-diagnostic .diagnostic-option-label {
   display: flex;
   align-items: center;
   gap: 16px;
