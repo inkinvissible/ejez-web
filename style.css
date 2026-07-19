@@ -1725,6 +1725,17 @@ nav#navbar {
   line-height: 1.6;
 }
 
+.article-diagnostic strong,
+.article-diagnostic b {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.article-diagnostic a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
 .article-diagnostic .diagnostic-btn-start {
   background: var(--color-ivory);
   color: var(--color-primary);
