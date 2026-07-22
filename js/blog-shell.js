@@ -121,6 +121,16 @@
     var whatsappUrl = "https://wa.me/" + phoneNumber.replace(/\D/g, "") + "?text=" + encodeURIComponent(baseMsg);
     whatsappBtn.setAttribute("href", whatsappUrl);
 
+    // PostHog: track WhatsApp floating button click as conversion event
+    whatsappBtn.addEventListener("click", function () {
+      if (window.posthog && typeof window.posthog.capture === "function") {
+        window.posthog.capture("whatsapp_clicked", {
+          location: "floating_button",
+          article_title: articleTitle
+        });
+      }
+    });
+
     // Scroll Handler
     var checkScroll = function () {
       var scrollPos = window.scrollY || window.pageYOffset;

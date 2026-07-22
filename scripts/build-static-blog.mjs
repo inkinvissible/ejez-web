@@ -519,6 +519,7 @@ function pageHead({
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" type="text/css" href="css/blog.css">
   ${posthogHeadScripts()}
+  <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
   <link rel="preload" href="images/logo-ejez.svg" as="image" type="image/svg+xml">
 </head>`;
 }
@@ -743,6 +744,27 @@ function renderArticlePage(entry, config, siteSettings) {
     auto: "format",
     q: 84
   });
+  const cover400 = toImageUrl(entry.coverAssetRef || entry.coverUrl, config, {
+    w: 400,
+    h: 225,
+    fit: "crop",
+    auto: "format",
+    q: 80
+  });
+  const cover800 = toImageUrl(entry.coverAssetRef || entry.coverUrl, config, {
+    w: 800,
+    h: 450,
+    fit: "crop",
+    auto: "format",
+    q: 82
+  });
+  const cover1200 = toImageUrl(entry.coverAssetRef || entry.coverUrl, config, {
+    w: 1200,
+    h: 675,
+    fit: "crop",
+    auto: "format",
+    q: 84
+  });
   const ogImage = toImageUrl(entry.seoOgAssetRef || entry.coverAssetRef || entry.coverUrl, config, {
     w: 1200,
     h: 630,
@@ -809,7 +831,7 @@ ${renderNav("blog")}
       </header>
       <div class="article-cover">
         ${cover
-          ? `<img src="${escapeHtml(cover)}" alt="${escapeHtml(entry.coverAlt || entry.title || "Portada del artículo")}" width="1600" height="900" decoding="async">`
+          ? `<img src="${escapeHtml(cover)}" srcset="${escapeHtml(cover400)} 400w, ${escapeHtml(cover800)} 800w, ${escapeHtml(cover1200)} 1200w, ${escapeHtml(cover)} 1600w" sizes="(max-width: 600px) 100vw, (max-width: 1200px) 80vw, 1200px" alt="${escapeHtml(entry.coverAlt || entry.title || "Portada del artículo")}" width="1600" height="900" decoding="async" fetchpriority="high">`
           : "<div class=\"article-cover-fallback\" aria-hidden=\"true\"></div>"}
       </div>
       <div class="article-body-wrap">
